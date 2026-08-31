@@ -2601,6 +2601,125 @@
       1,
       1
     ]
+  },
+  "ASP KOMPIUTERIO DEZE SU SPINTELE": {
+    "position": [
+      -4.55,
+      0,
+      3.2
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ASP STACIONARAUS KOMPIUTERIO DEZE": {
+    "position": [
+      0,
+      0.9,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      0.81451,
+      1,
+      1
+    ]
+  },
+  "GPE PILKA SPINTELE": {
+    "position": [
+      -3.95,
+      0,
+      11.7
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "GPE PILKA SPINTELE kopija": {
+    "position": [
+      -3.15,
+      0,
+      11.7
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "GPE PILKA SPINTELE kopija kopija": {
+    "position": [
+      3.85,
+      0,
+      11.8
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "GPE PILKA SPINTELE kopija kopija kopija": {
+    "position": [
+      3.85,
+      0,
+      10.8
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "GPE PILKA SPINTELE kopija kopija kopija kopija": {
+    "position": [
+      4.15,
+      0,
+      2.9
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
   }
 }; // DEBUG_SAVE_DATA
     // DEBUG_CLONE_DATA: debug režime sukurtos objektų kopijos.
@@ -3453,6 +3572,82 @@
       -3.1415927,
       12.5663707,
       -3.1415927
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "GPE PILKA SPINTELE kopija",
+    "sourceName": "GPE PILKA SPINTELE",
+    "position": [
+      -3.15,
+      0,
+      11.7
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "GPE PILKA SPINTELE kopija kopija",
+    "sourceName": "GPE PILKA SPINTELE",
+    "position": [
+      3.85,
+      0,
+      11.8
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "GPE PILKA SPINTELE kopija kopija kopija",
+    "sourceName": "GPE PILKA SPINTELE",
+    "position": [
+      3.85,
+      0,
+      10.8
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "GPE PILKA SPINTELE kopija kopija kopija kopija",
+    "sourceName": "GPE PILKA SPINTELE",
+    "position": [
+      4.15,
+      0,
+      2.9
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
     ],
     "scale": [
       1,
@@ -12142,26 +12337,69 @@
     const vyruKlozetas1 = addAtviraKlozetoKabina(vyruTulikas, vyruKabinuZ1, moteruKlozetas, 'VYRU KLOZETAS 1', 'VYRU KABINA 1', 1.60);
     addAtviraKlozetoKabina(vyruTulikas, vyruKabinuZ2, moteruKlozetas, 'VYRU KLOZETAS 2', 'VYRU KABINA 2', 1.60);
 
-    // Vienas vyru klozetas paliktas prisiktas – ruda kruvele matoma dubens viduje.
+    // Vienas vyru klozetas paliktas prisiktas – aiški, susisukusi išmatų krūvelė dubens viduje.
     const kakioMat = new THREE.MeshStandardMaterial({
-      color: 0x5a2d12, roughness: 0.95, metalness: 0.0
+      color: 0x4b2410, roughness: 0.98, metalness: 0.0
+    });
+    const kakioSviesesnisMat = new THREE.MeshStandardMaterial({
+      color: 0x633018, roughness: 1.0, metalness: 0.0
     });
     const kakis = new THREE.Group();
     kakis.name = 'KAKIS VYRU KLOZETE 1';
 
-    const kakioDalys = [
-      { x: -0.10, y: 0.625, z: 0.38, sx: 0.16, sy: 0.10, sz: 0.23, rz: 0.35 },
-      { x:  0.09, y: 0.640, z: 0.41, sx: 0.15, sy: 0.095, sz: 0.22, rz: -0.28 },
-      { x:  0.00, y: 0.680, z: 0.34, sx: 0.13, sy: 0.085, sz: 0.20, rz: 0.12 }
-    ];
-    for (const d of kakioDalys) {
-      const gabalas = new THREE.Mesh(new THREE.SphereGeometry(1, 18, 12), kakioMat);
-      gabalas.position.set(d.x, d.y, d.z);
-      gabalas.scale.set(d.sx, d.sy, d.sz);
-      gabalas.rotation.z = d.rz;
-      gabalas.castShadow = true;
-      kakis.add(gabalas);
-    }
+    // Apatinė stora „dešrelė“ – lenkta, kad atrodytų organiškai, o ne kaip rutuliukai.
+    const apatineKreive = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.17, 0.615, 0.34),
+      new THREE.Vector3(-0.10, 0.630, 0.42),
+      new THREE.Vector3( 0.01, 0.625, 0.45),
+      new THREE.Vector3( 0.14, 0.635, 0.40),
+      new THREE.Vector3( 0.17, 0.650, 0.32)
+    ]);
+    const apatine = new THREE.Mesh(
+      new THREE.TubeGeometry(apatineKreive, 36, 0.085, 14, false),
+      kakioMat
+    );
+    apatine.castShadow = true;
+    kakis.add(apatine);
+
+    // Antras sluoksnis – trumpesnė susisukusi dalis ant viršaus.
+    const vidurineKreive = new THREE.CatmullRomCurve3([
+      new THREE.Vector3( 0.12, 0.665, 0.35),
+      new THREE.Vector3( 0.07, 0.690, 0.29),
+      new THREE.Vector3(-0.03, 0.700, 0.29),
+      new THREE.Vector3(-0.10, 0.710, 0.35),
+      new THREE.Vector3(-0.05, 0.725, 0.41)
+    ]);
+    const vidurine = new THREE.Mesh(
+      new THREE.TubeGeometry(vidurineKreive, 30, 0.072, 14, false),
+      kakioSviesesnisMat
+    );
+    vidurine.castShadow = true;
+    kakis.add(vidurine);
+
+    // Viršūnė – kylantis galas su smailėjančiu galiuku, kad siluetas būtų aiškiai „šūdo“ formos.
+    const virsusKreive = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.05, 0.730, 0.40),
+      new THREE.Vector3( 0.00, 0.755, 0.39),
+      new THREE.Vector3( 0.04, 0.790, 0.36),
+      new THREE.Vector3( 0.02, 0.825, 0.34)
+    ]);
+    const virsus = new THREE.Mesh(
+      new THREE.TubeGeometry(virsusKreive, 24, 0.060, 14, false),
+      kakioMat
+    );
+    virsus.castShadow = true;
+    kakis.add(virsus);
+
+    const smailusGalas = new THREE.Mesh(
+      new THREE.ConeGeometry(0.058, 0.13, 16),
+      kakioMat
+    );
+    smailusGalas.position.set(0.02, 0.880, 0.34);
+    smailusGalas.rotation.z = -0.18;
+    smailusGalas.castShadow = true;
+    kakis.add(smailusGalas);
+
     vyruKlozetas1.add(kakis);
 
     // ============================================================
@@ -12196,74 +12434,102 @@
       g.name = `${prefix} KRIAUKLE ${index}`;
       g.userData.objectName = g.name;
 
-      // Balta pakabinama kriaukle – dubuo atviras i kambario puse (+Z).
-      const dubuo = new THREE.Mesh(
-        new THREE.SphereGeometry(0.43, 36, 22, 0, Math.PI * 2, 0, Math.PI / 2),
-        tulikoKriauklesPorcelianas
+      // Klasikinis baltas praustuvas su plačiu ovaliu dubeniu ir pjedestalu,
+      // panašus į pateiktą etaloną. Dubuo atviras į kambario pusę (+Z).
+      const outerPts = [
+        new THREE.Vector2(0.10, 0.79),
+        new THREE.Vector2(0.24, 0.82),
+        new THREE.Vector2(0.35, 0.87),
+        new THREE.Vector2(0.42, 0.93),
+        new THREE.Vector2(0.44, 0.99)
+      ];
+      const outerBowl = new THREE.Mesh(
+        new THREE.LatheGeometry(outerPts, 48), tulikoKriauklesPorcelianas
       );
-      dubuo.scale.set(1.0, 0.34, 0.72);
-      dubuo.rotation.x = Math.PI;
-      dubuo.position.set(0, 0.91, 0.24);
-      dubuo.castShadow = true;
-      dubuo.receiveShadow = true;
-      g.add(dubuo);
+      outerBowl.scale.set(1.12, 1.0, 0.78);
+      outerBowl.position.set(0, 0, 0.22);
+      outerBowl.castShadow = true;
+      outerBowl.receiveShadow = true;
+      g.add(outerBowl);
 
-      // Vidine dubens dalis suteikia aisku kriaukles gyli.
-      const vidus = new THREE.Mesh(
-        new THREE.SphereGeometry(0.34, 32, 18, 0, Math.PI * 2, 0, Math.PI / 2),
-        tulikoKriauklesVidus
+      // Vidinis įdubimas – atskiras šviesiai pilkas porceliano paviršius.
+      const innerPts = [
+        new THREE.Vector2(0.075, 0.825),
+        new THREE.Vector2(0.20, 0.845),
+        new THREE.Vector2(0.31, 0.885),
+        new THREE.Vector2(0.385, 0.94),
+        new THREE.Vector2(0.405, 0.982)
+      ];
+      const innerBowl = new THREE.Mesh(
+        new THREE.LatheGeometry(innerPts, 48), tulikoKriauklesVidus
       );
-      vidus.scale.set(1.0, 0.24, 0.66);
-      vidus.rotation.x = Math.PI;
-      vidus.position.set(0, 0.925, 0.245);
-      g.add(vidus);
+      innerBowl.scale.set(1.12, 1.0, 0.78);
+      innerBowl.position.set(0, 0, 0.22);
+      innerBowl.material.side = THREE.BackSide;
+      g.add(innerBowl);
 
-      // Storas baltas kriaukles krastas: dubuo atrodo vientisas, ne kaip permatoma plona skraiste.
+      // Storas ovalus porceliano kraštas aplink dubenį.
       const krastas = new THREE.Mesh(
-        new THREE.TorusGeometry(0.365, 0.055, 14, 40), tulikoKriauklesPorcelianas
+        new THREE.TorusGeometry(0.43, 0.045, 16, 56), tulikoKriauklesPorcelianas
       );
       krastas.rotation.x = Math.PI / 2;
-      krastas.scale.set(1.0, 1.0, 0.70);
-      krastas.position.set(0, 0.955, 0.245);
+      krastas.scale.set(1.12, 0.78, 1.0);
+      krastas.position.set(0, 0.995, 0.22);
       krastas.castShadow = true;
       g.add(krastas);
 
-      // Gylesnis vidinis dugnas po krastu – paliekamas matomas idubimas iki nutekejimo.
-      const gilusDugnas = new THREE.Mesh(
-        new THREE.SphereGeometry(0.285, 32, 18, 0, Math.PI * 2, 0, Math.PI / 2),
-        tulikoKriauklesVidus
+      // Galinė horizontali porceliano lentynėlė prie sienos, kaip etaloninėje kriauklėje.
+      const backDeck = new THREE.Mesh(
+        new THREE.BoxGeometry(0.82, 0.075, 0.20), tulikoKriauklesPorcelianas
       );
-      gilusDugnas.scale.set(1.0, 0.38, 0.62);
-      gilusDugnas.rotation.x = Math.PI;
-      gilusDugnas.position.set(0, 0.885, 0.27);
-      g.add(gilusDugnas);
+      backDeck.position.set(0, 1.015, -0.075);
+      backDeck.castShadow = true;
+      g.add(backDeck);
 
+      // Nutekėjimo anga dubens dugne.
       const nutekejimas = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.045, 0.045, 0.012, 20), tulikoChromas
+        new THREE.CylinderGeometry(0.043, 0.043, 0.014, 24), tulikoChromas
       );
-      nutekejimas.position.set(0, 0.872, 0.27);
+      nutekejimas.position.set(0, 0.832, 0.235);
       g.add(nutekejimas);
 
-      // Sifono / atramos dalis po kriaukle.
+      // Pilnas pjedestalas: platesnis viršuje, siauresnis per vidurį, apačioje vėl platėja.
+      const pedestalPts = [
+        new THREE.Vector2(0.16, 0.05),
+        new THREE.Vector2(0.18, 0.09),
+        new THREE.Vector2(0.17, 0.20),
+        new THREE.Vector2(0.13, 0.38),
+        new THREE.Vector2(0.12, 0.58),
+        new THREE.Vector2(0.15, 0.74),
+        new THREE.Vector2(0.22, 0.82)
+      ];
       const kojele = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.105, 0.14, 0.62, 24), tulikoKriauklesPorcelianas
+        new THREE.LatheGeometry(pedestalPts, 40), tulikoKriauklesPorcelianas
       );
-      kojele.position.set(0, 0.52, 0.06);
+      kojele.scale.set(0.95, 1.0, 0.78);
+      kojele.position.z = 0.02;
       kojele.castShadow = true;
+      kojele.receiveShadow = true;
       g.add(kojele);
 
-      // Chromuotas ciaupas.
+      // Chromuotas vienos angos čiaupas su trumpu snapu virš galinės lentynėlės.
       const ciaupoStovas = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.032, 0.038, 0.28, 18), tulikoChromas
+        new THREE.CylinderGeometry(0.032, 0.040, 0.22, 20), tulikoChromas
       );
-      ciaupoStovas.position.set(0, 1.10, 0.02);
+      ciaupoStovas.position.set(0, 1.145, -0.055);
       g.add(ciaupoStovas);
       const ciaupoSnapas = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.026, 0.026, 0.22, 18), tulikoChromas
+        new THREE.CylinderGeometry(0.025, 0.025, 0.18, 18), tulikoChromas
       );
       ciaupoSnapas.rotation.x = Math.PI / 2;
-      ciaupoSnapas.position.set(0, 1.20, 0.115);
+      ciaupoSnapas.position.set(0, 1.215, 0.025);
       g.add(ciaupoSnapas);
+      const ciaupoGalvute = new THREE.Mesh(
+        new THREE.SphereGeometry(0.045, 18, 12), tulikoChromas
+      );
+      ciaupoGalvute.scale.set(1.0, 0.55, 1.0);
+      ciaupoGalvute.position.set(0, 1.255, -0.055);
+      g.add(ciaupoGalvute);
 
       // Kriaukle statoma tik vidineje pasirinktos sienos puseje.
       const isFrontWall = wallSide === 'front';
@@ -18352,6 +18618,66 @@
       renderer.render(scene, camera);
     }
 
+    // ASP stacionaraus kompiuterio dėžė ant mažos pilkos spintelės
+    const aspPcSetup = new THREE.Group();
+    aspPcSetup.name = 'ASP KOMPIUTERIO DEZE SU SPINTELE';
+    aspPcSetup.position.set(-5.55, 0.00, 5.10);
+    aspPcSetup.rotation.y = Math.PI / 2;
+
+    const cabinetMat = new THREE.MeshStandardMaterial({ color: 0x777b80, roughness: 0.78, metalness: 0.12 });
+    const cabinetTopMat = new THREE.MeshStandardMaterial({ color: 0x969a9f, roughness: 0.68, metalness: 0.18 });
+    const cabinet = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.82, 0.82), cabinetMat);
+    cabinet.position.y = 0.41; cabinet.castShadow = true; cabinet.receiveShadow = true; aspPcSetup.add(cabinet);
+    const cabinetTop = new THREE.Mesh(new THREE.BoxGeometry(1.02, 0.07, 0.90), cabinetTopMat);
+    cabinetTop.position.y = 0.855; cabinetTop.castShadow = true; aspPcSetup.add(cabinetTop);
+    const drawerLineMat = new THREE.MeshStandardMaterial({ color: 0x4f5357, roughness: 0.8 });
+    for (const yy of [0.25,0.47]) { const line = new THREE.Mesh(new THREE.BoxGeometry(0.56,0.025,0.012),drawerLineMat); line.position.set(0,yy,0.366); aspPcSetup.add(line); }
+
+    const pc = new THREE.Group(); pc.name = 'ASP STACIONARAUS KOMPIUTERIO DEZE'; pc.position.y = 0.90; aspPcSetup.add(pc);
+    const blackMat = new THREE.MeshStandardMaterial({ color: 0x090b0d, roughness: 0.42, metalness: 0.55 });
+    const panelMat = new THREE.MeshStandardMaterial({ color: 0x111419, roughness: 0.28, metalness: 0.68 });
+    const caseBody = new THREE.Mesh(new THREE.BoxGeometry(0.62, 1.15, 0.92), blackMat); caseBody.position.y=0.575; caseBody.castShadow=true; pc.add(caseBody);
+    const front = new THREE.Mesh(new THREE.BoxGeometry(0.625,1.08,0.03),panelMat); front.position.set(0,0.575,0.475); pc.add(front);
+    const glass = new THREE.Mesh(new THREE.BoxGeometry(0.03,0.95,0.75), new THREE.MeshStandardMaterial({color:0x111820,transparent:true,opacity:0.46,roughness:0.1,metalness:0.25})); glass.position.set(-0.325,0.60,0); pc.add(glass);
+    // viršaus mesh / ventiliacija
+    const vent = new THREE.Mesh(new THREE.BoxGeometry(0.46,0.015,0.64), new THREE.MeshStandardMaterial({color:0x20242a,roughness:0.85})); vent.position.set(0,1.158,-0.03); pc.add(vent);
+    // dvi RGB juostos priekyje kaip reference nuotraukoje
+    const rgbColors=[0x36ff54,0x8b35ff];
+    [-0.055,0.055].forEach((x,i)=>{ const strip=new THREE.Mesh(new THREE.BoxGeometry(0.03,0.78,0.022),new THREE.MeshStandardMaterial({color:rgbColors[i],emissive:rgbColors[i],emissiveIntensity:1.6})); strip.position.set(x,0.52,0.488); pc.add(strip); });
+    // maitinimo mygtukas
+    const power=new THREE.Mesh(new THREE.CylinderGeometry(0.022,0.022,0.012,16),new THREE.MeshStandardMaterial({color:0x66ff88,emissive:0x22aa44,emissiveIntensity:1})); power.rotation.x=Math.PI/2; power.position.set(0.20,1.03,0.49); pc.add(power);
+    // vidinis žalias ventiliatorius pro šoninį stiklą
+    const fan=new THREE.Mesh(new THREE.TorusGeometry(0.15,0.026,8,24),new THREE.MeshStandardMaterial({color:0x45ff55,emissive:0x22cc33,emissiveIntensity:1.1})); fan.rotation.y=Math.PI/2; fan.position.set(-0.345,0.78,-0.20); pc.add(fan);
+    const aspPcGlow = new THREE.PointLight(0x55ff88, 1.2, 3.2);
+    aspPcGlow.position.set(-0.25, 1.45, 0.15);
+    aspPcSetup.add(aspPcGlow);
+    scene.add(aspPcSetup);
+
+    // GPE stalo maža pilka spintelė – tokia pati kaip prie ASP, tik be kompiuterio dėžės
+    const gpeCabinetSetup = new THREE.Group();
+    gpeCabinetSetup.name = 'GPE PILKA SPINTELE';
+    gpeCabinetSetup.position.set(-4.25, 0.00, 11.70);
+    gpeCabinetSetup.rotation.y = Math.PI / 2;
+
+    const gpeCabinet = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.82, 0.82), cabinetMat);
+    gpeCabinet.position.y = 0.41;
+    gpeCabinet.castShadow = true;
+    gpeCabinet.receiveShadow = true;
+    gpeCabinetSetup.add(gpeCabinet);
+
+    const gpeCabinetTop = new THREE.Mesh(new THREE.BoxGeometry(1.02, 0.07, 0.90), cabinetTopMat);
+    gpeCabinetTop.position.y = 0.855;
+    gpeCabinetTop.castShadow = true;
+    gpeCabinetSetup.add(gpeCabinetTop);
+
+    for (const yy of [0.25, 0.47]) {
+      const line = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.025, 0.012), drawerLineMat);
+      line.position.set(0, yy, 0.366);
+      gpeCabinetSetup.add(line);
+    }
+    scene.add(gpeCabinetSetup);
+
+
     animate();
 
     window.addEventListener('resize', () => {
@@ -18359,7 +18685,10 @@
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
+
+
   </script>
+
 
 
 </body></html>
