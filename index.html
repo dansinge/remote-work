@@ -2647,7 +2647,7 @@
   },
   "GPE PILKA SPINTELE": {
     "position": [
-      -3.95,
+      -4.25,
       0,
       11.7
     ],
@@ -2664,7 +2664,7 @@
   },
   "GPE PILKA SPINTELE kopija": {
     "position": [
-      -3.05,
+      -3.35,
       0,
       11.7
     ],
@@ -2681,9 +2681,9 @@
   },
   "GPE PILKA SPINTELE kopija kopija": {
     "position": [
-      3.7366,
+      3.85,
       0,
-      11.68898
+      11.7
     ],
     "rotation": [
       0,
@@ -2698,9 +2698,9 @@
   },
   "GPE PILKA SPINTELE kopija kopija kopija": {
     "position": [
-      3.7366,
+      3.85,
       0,
-      10.68898
+      10.7
     ],
     "rotation": [
       0,
@@ -2715,9 +2715,9 @@
   },
   "GPE PILKA SPINTELE kopija kopija kopija kopija": {
     "position": [
-      3.7366,
+      3.65,
       0,
-      3.48898
+      3.5
     ],
     "rotation": [
       0,
@@ -2769,6 +2769,40 @@
       -6.35,
       0,
       -8.55
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "GLE PILKA SPINTELE": {
+    "position": [
+      3.85,
+      0,
+      10.7
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "GLE PILKA SPINTELE kopija": {
+    "position": [
+      3.85,
+      0,
+      11.7
     ],
     "rotation": [
       0,
@@ -3640,10 +3674,29 @@
     ]
   },
   {
+    "name": "GLE PILKA SPINTELE kopija",
+    "sourceName": "GLE PILKA SPINTELE",
+    "position": [
+      3.85,
+      0,
+      11.7
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
     "name": "GPE PILKA SPINTELE kopija",
     "sourceName": "GPE PILKA SPINTELE",
     "position": [
-      -3.05,
+      -3.35,
       0,
       11.7
     ],
@@ -3662,9 +3715,9 @@
     "name": "GPE PILKA SPINTELE kopija kopija",
     "sourceName": "GPE PILKA SPINTELE",
     "position": [
-      3.7366,
+      3.85,
       0,
-      11.68898
+      11.7
     ],
     "rotation": [
       0,
@@ -3681,9 +3734,9 @@
     "name": "GPE PILKA SPINTELE kopija kopija kopija",
     "sourceName": "GPE PILKA SPINTELE",
     "position": [
-      3.7366,
+      3.85,
       0,
-      10.68898
+      10.7
     ],
     "rotation": [
       0,
@@ -3700,9 +3753,9 @@
     "name": "GPE PILKA SPINTELE kopija kopija kopija kopija",
     "sourceName": "GPE PILKA SPINTELE",
     "position": [
-      3.7366,
+      3.65,
       0,
-      3.48898
+      3.5
     ],
     "rotation": [
       0,
@@ -8594,31 +8647,75 @@
       chillTvUnit.add(chillTvYoutubeObject);
     }
 
+    // CSS3D GIF neturi WebGL depth testo, todėl tikriname VISĄ sceną raycasteriu.
+    // Jei tarp kameros ir TV yra nepermatoma siena / objektas, GIF slepiamas.
+    // Taip beždžionių GIF negali persimatyti kiaurai per kitų patalpų sienas.
     const chillTvOcclusionWorldPos = new THREE.Vector3();
+    const chillTvOcclusionDir = new THREE.Vector3();
+    const chillTvOcclusionRaycaster = new THREE.Raycaster();
+
     function updateChillTvGifOcclusion() {
       if (!chillTvYoutubeObject || !chillTvYoutubeObject.element) return;
-      chillTvYoutubeObject.getWorldPosition(chillTvOcclusionWorldPos);
-      const wallX = chillRoom.left;
-      const camSide = camera.position.x - wallX;
-      const tvSide = chillTvOcclusionWorldPos.x - wallX;
-      let blockedByPmWall = false;
 
-      if (camSide * tvSide < 0) {
-        const dx = chillTvOcclusionWorldPos.x - camera.position.x;
-        if (Math.abs(dx) > 1e-6) {
-          const t = (wallX - camera.position.x) / dx;
-          if (t > 0 && t < 1) {
-            const hitZ = camera.position.z + (chillTvOcclusionWorldPos.z - camera.position.z) * t;
-            const hitY = camera.position.y + (chillTvOcclusionWorldPos.y - camera.position.y) * t;
-            blockedByPmWall =
-              hitZ >= chillRoom.back - chillRoom.wallThickness &&
-              hitZ <= chillRoom.front + chillRoom.wallThickness &&
-              hitY >= 0 && hitY <= wallHeight;
-          }
-        }
+      const el = chillTvYoutubeObject.element;
+      chillTvYoutubeObject.getWorldPosition(chillTvOcclusionWorldPos);
+      chillTvOcclusionDir.copy(chillTvOcclusionWorldPos).sub(camera.position);
+      const tvDistance = chillTvOcclusionDir.length();
+      if (tvDistance < 0.001) {
+        el.style.visibility = 'visible';
+        el.style.opacity = '1';
+        el.style.filter = 'none';
+        return;
       }
 
-      chillTvYoutubeObject.element.style.visibility = blockedByPmWall ? 'hidden' : 'visible';
+      chillTvOcclusionDir.normalize();
+      chillTvOcclusionRaycaster.set(camera.position, chillTvOcclusionDir);
+      chillTvOcclusionRaycaster.near = 0.03;
+      chillTvOcclusionRaycaster.far = Math.max(0.03, tvDistance - 0.03);
+
+      const hits = chillTvOcclusionRaycaster.intersectObjects(scene.children, true);
+      let blocked = false;
+      let glassSeen = false;
+
+      for (const hit of hits) {
+        const obj = hit.object;
+        if (!obj || !obj.isMesh) continue;
+
+        // Pats TV/spintelė neturi uždengti savo ekrano.
+        let node = obj;
+        let belongsToTv = false;
+        while (node) {
+          if (node === chillTvUnit) { belongsToTv = true; break; }
+          node = node.parent;
+        }
+        if (belongsToTv) continue;
+
+        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+
+        // Tikras stiklas: transparent medžiaga ir/ar transmission. Jei žiūrime į TV
+        // per tokią sieną, GIF lieka matomas, bet atrodo prislopintas už stiklo.
+        const glass = mats.some(mat => mat && mat.visible !== false && (
+          ((mat.transparent === true) && Number.isFinite(mat.opacity) && mat.opacity > 0.03 && mat.opacity < 0.90) ||
+          (Number.isFinite(mat.transmission) && mat.transmission > 0.05)
+        ));
+        if (glass) {
+          glassSeen = true;
+          continue;
+        }
+
+        // Vientisa nepermatoma geometrija vis dar visiškai uždengia CSS3D GIF.
+        const opaque = mats.some(mat => mat && mat.visible !== false && mat.opacity >= 0.90 && mat.transparent !== true);
+        if (!opaque) continue;
+
+        blocked = true;
+        break;
+      }
+
+      el.style.visibility = blocked ? 'hidden' : 'visible';
+      el.style.opacity = blocked ? '0' : (glassSeen ? '0.52' : '1');
+      el.style.filter = (!blocked && glassSeen)
+        ? 'brightness(0.78) saturate(0.72) contrast(0.92)'
+        : 'none';
     }
 
     function startChillTvYoutube() {}
@@ -18905,6 +19002,33 @@
       gpeCabinetSetup.add(line);
     }
     scene.add(gpeCabinetSetup);
+
+    // Tokios pačios pilkos spintelės prie DLU, GLE, N ir ODA stalų.
+    // Klonuojame visą GPE spintelės grupę, todėl matmenys, medžiagos ir stalviršis lieka identiški.
+    const extraDeskCabinets = [
+      { name: 'DLU PILKA SPINTELE', position: [-3.35, 0.00, 11.70], rotationY: Math.PI / 2 },
+      { name: 'GLE PILKA SPINTELE', position: [ 3.85, 0.00, 10.70], rotationY: Math.PI / 2 },
+      { name: 'N PILKA SPINTELE',   position: [-10.55, 0.00, 11.70], rotationY: Math.PI / 2 },
+      { name: 'ODA PILKA SPINTELE', position: [ 3.65, 0.00,  3.50], rotationY: Math.PI / 2 }
+    ];
+
+    for (const cfg of extraDeskCabinets) {
+      const clone = gpeCabinetSetup.clone(true);
+      clone.name = cfg.name;
+      clone.userData.objectName = cfg.name;
+      clone.position.set(...cfg.position);
+      clone.rotation.set(0, cfg.rotationY, 0);
+
+      // Jei spintelė vėliau pastumta per F3 debug ir HTML išsaugotas,
+      // naudoti išsaugotą vietą, o ne grąžinti į hardcodintą poziciją.
+      const tr = DEBUG_SAVED_TRANSFORMS[cfg.name];
+      if (tr) {
+        if (tr.position) clone.position.fromArray(tr.position);
+        if (tr.rotation) clone.rotation.fromArray(tr.rotation);
+        if (tr.scale) clone.scale.fromArray(tr.scale);
+      }
+      scene.add(clone);
+    }
 
 
     animate();
