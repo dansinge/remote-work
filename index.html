@@ -2,7 +2,7 @@
 <html lang="lt"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>REMOTE WORK</title>
+  <title>3D vaikščiojimas</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
     * { box-sizing: border-box; }
@@ -791,7 +791,7 @@
     ],
     "rotation": [
       0,
-      0,
+      3.1415927,
       0
     ],
     "scale": [
@@ -2492,6 +2492,108 @@
     "rotation": [
       0,
       -1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "devu programavimo lentos schemos": {
+    "position": [
+      -0.024,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      10.9955743,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "devu programavimo lenta stiklas": {
+    "position": [
+      -0.08506,
+      0,
+      3.04512
+    ],
+    "rotation": [
+      0,
+      6.2831853,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "1 auksto reception kede": {
+    "position": [
+      26.65,
+      -25,
+      -14.89
+    ],
+    "rotation": [
+      0,
+      4.712389,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "priimamojo melyna sofa": {
+    "position": [
+      17.39,
+      0.06,
+      -3.83
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "liftu laukiamojo sedyne": {
+    "position": [
+      23,
+      0.02,
+      -16.7
+    ],
+    "rotation": [
+      0,
+      3.1415927,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "galines kamurkes fake spinta": {
+    "position": [
+      30.53,
+      0,
+      -4.11
+    ],
+    "rotation": [
+      0,
+      7.8539816,
       0
     ],
     "scale": [
@@ -7801,6 +7903,137 @@
     chillPatternPillow2.rotation.z = -0.04;
 
     scene.add(chillSofa);
+
+    // ============================================================
+    // OBJEKTAS: PRIIMAMOJO MĖLYNA SOFA
+    // Pagal pateiktą nuotrauką: paprasta tamsiai mėlyna dvivietė sofa
+    // su vientisa sėdyne, aukšta atlošo dalimi ir plonomis juodomis kojomis.
+    // Vieta: priešais priimamąjį, x=17.39 y=0.06 z=-4.33.
+    // ============================================================
+    const receptionBlueSofa = new THREE.Group();
+    receptionBlueSofa.name = 'priimamojo melyna sofa';
+    receptionBlueSofa.userData.objectName = 'priimamojo melyna sofa';
+    receptionBlueSofa.position.set(17.39, 0.06, -4.33);
+
+    const receptionSofaBlue = new THREE.MeshStandardMaterial({
+      color: 0x202b4d,
+      roughness: 0.92,
+      metalness: 0.0
+    });
+    const receptionSofaBlueDark = new THREE.MeshStandardMaterial({
+      color: 0x18213c,
+      roughness: 0.95,
+      metalness: 0.0
+    });
+    const receptionSofaLegMat = new THREE.MeshStandardMaterial({
+      color: 0x151515,
+      roughness: 0.72,
+      metalness: 0.25
+    });
+
+    function addReceptionSofaPart(w, h, d, x, y, z, material, radius = 0.055) {
+      const mesh = new THREE.Mesh(createRoundedBoxGeometry(w, h, d, radius), material);
+      mesh.position.set(x, y, z);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      receptionBlueSofa.add(mesh);
+      return mesh;
+    }
+
+    // Sofa stovi išilgai Z krypties, kaip siaura dvivietė laukiamojo sofa.
+    // Nugara yra +X pusėje, todėl sėdimoji dalis atsukta į priimamojo pusę (-X).
+    const receptionSofaDepth = 0.86;
+    const receptionSofaLength = 2.35;
+
+    // Apatinis minkštas korpusas ir vientisa sėdynė.
+    addReceptionSofaPart(receptionSofaDepth, 0.24, receptionSofaLength, 0, 0.43, 0, receptionSofaBlueDark, 0.07);
+    addReceptionSofaPart(0.74, 0.20, 2.20, -0.055, 0.60, 0, receptionSofaBlue, 0.075);
+
+    // Aukšta, truputį atgal atlošta nugarėlė.
+    const receptionBack = addReceptionSofaPart(0.18, 0.93, 2.28, 0.34, 0.94, 0, receptionSofaBlue, 0.065);
+    receptionBack.rotation.z = -0.055;
+
+    // Plonos juodos metalinės kojos – kaip nuotraukoje.
+    const legGeo = new THREE.BoxGeometry(0.055, 0.42, 0.055);
+    for (const [lx, lz] of [[-0.25,-0.92],[-0.25,0.92],[0.25,-0.92],[0.25,0.92]]) {
+      const leg = new THREE.Mesh(legGeo, receptionSofaLegMat);
+      leg.position.set(lx, 0.19, lz);
+      leg.castShadow = true;
+      receptionBlueSofa.add(leg);
+    }
+
+    scene.add(receptionBlueSofa);
+
+    // ============================================================
+    // OBJEKTAS: LIFTU LAUKIAMOJO SEDYNE
+    // Pagal pateiktą nuotrauką: trijų vietų juoda laukiamojo sėdynė
+    // su atskiromis minkštomis sėdynėmis ir atlošais, metaliniu rėmu,
+    // išlenktomis kojomis ir kairėje pritvirtintu šviesiu staliuku.
+    // Pataisyta vieta realiame liftų kambaryje: x=23.00 y=0.02 z=-16.20.
+    // Ankstesnės naudotojo nurodytos koordinatės šiame world coordinate tinkle buvo už liftų kambario ribų ir po grindimis.
+    // ============================================================
+    const liftWaitingBench = new THREE.Group();
+    liftWaitingBench.name = 'liftu laukiamojo sedyne';
+    liftWaitingBench.userData.objectName = 'liftu laukiamojo sedyne';
+    liftWaitingBench.position.set(23.00, 0.02, -16.20);
+    liftWaitingBench.rotation.y = 0;
+
+    const liftBenchBlack = new THREE.MeshStandardMaterial({
+      color: 0x111214, roughness: 0.82, metalness: 0.02
+    });
+    const liftBenchBlackDark = new THREE.MeshStandardMaterial({
+      color: 0x090a0b, roughness: 0.9, metalness: 0.02
+    });
+    const liftBenchMetal = new THREE.MeshStandardMaterial({
+      color: 0x6e7274, roughness: 0.38, metalness: 0.78
+    });
+    const liftBenchTableTopMat = new THREE.MeshStandardMaterial({
+      color: 0xd8c7a7, roughness: 0.72, metalness: 0.0
+    });
+
+    function addLiftBenchPart(w, h, d, x, y, z, material, radius = 0.045) {
+      const mesh = new THREE.Mesh(createRoundedBoxGeometry(w, h, d, radius), material);
+      mesh.position.set(x, y, z);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      liftWaitingBench.add(mesh);
+      return mesh;
+    }
+
+    // Metalinė horizontali sija po sėdynėmis.
+    addLiftBenchPart(3.18, 0.10, 0.10, 0.34, 0.49, 0.08, liftBenchMetal, 0.025);
+
+    // Trys atskiros minkštos sėdynės ir trys atlošai.
+    const liftBenchSeatXs = [-0.72, 0.28, 1.28];
+    for (const sx of liftBenchSeatXs) {
+      const seat = addLiftBenchPart(0.92, 0.16, 0.72, sx, 0.64, -0.03, liftBenchBlack, 0.085);
+      seat.rotation.x = -0.025;
+
+      const back = addLiftBenchPart(0.92, 0.78, 0.14, sx, 1.08, 0.31, liftBenchBlack, 0.075);
+      back.rotation.x = -0.09;
+
+      // Plona tamsesnė juosta tarp atlošo ir sėdynės.
+      addLiftBenchPart(0.86, 0.055, 0.08, sx, 0.76, 0.27, liftBenchBlackDark, 0.02);
+    }
+
+    // Išlenktų kojų imitacija – po vieną porą kraštuose.
+    function addLiftBenchLeg(x) {
+      const leg = addLiftBenchPart(0.11, 0.52, 0.11, x, 0.27, 0.13, liftBenchMetal, 0.025);
+      leg.rotation.x = -0.28;
+      const foot = addLiftBenchPart(0.11, 0.10, 0.56, x, 0.055, -0.02, liftBenchMetal, 0.025);
+      foot.rotation.x = 0.10;
+    }
+    addLiftBenchLeg(-1.12);
+    addLiftBenchLeg(1.70);
+
+    // Kairėje prie suolo pritvirtintas šviesus staliukas.
+    const tableTop = addLiftBenchPart(0.94, 0.085, 0.74, -1.72, 0.66, -0.02, liftBenchTableTopMat, 0.055);
+    tableTop.rotation.y = -0.015;
+    addLiftBenchPart(0.12, 0.52, 0.12, -1.72, 0.34, 0.03, liftBenchMetal, 0.025);
+    const tableFoot = addLiftBenchPart(0.62, 0.10, 0.18, -1.72, 0.075, -0.02, liftBenchMetal, 0.035);
+    tableFoot.rotation.y = -0.02;
+
+    scene.add(liftWaitingBench);
 
     // CHILL ZONE SOFOS HOVER / TAIKIKLIO HINTAS.
     const chillSofaWorldPos = new THREE.Vector3();
@@ -13511,6 +13744,87 @@
 
 
     // ============================================================
+    // ============================================================
+    // GALINĖS KAMURKĖS FAKE STUMDOMŲ DURŲ SPINTOS FASADAS – DV_PUSIS / LAUKO LYGIS
+    // DEBUG perkėlimo atraminė koordinatė: x=34.23, y=0.00, z=-1.91.
+    // Tai nėra tikra spinta: tik plona dekoratyvinė siena su fake stumdomų durų fasadu.
+    const galinesKamurkesFakeSpinta = new THREE.Group();
+    galinesKamurkesFakeSpinta.name = 'galines kamurkes fake spinta';
+    galinesKamurkesFakeSpinta.userData.objectName = 'galines kamurkes fake spinta';
+    galinesKamurkesFakeSpinta.position.set(34.23, 0.00, -1.91);
+
+    // Didelė plona lenta: 7 m ilgio, 5 m aukščio, tik 18 cm storio.
+    // Ji eina Z kryptimi, todėl fasadas žiūri į +/-X.
+    const wardrobeBodyMat = new THREE.MeshStandardMaterial({
+      color: 0x676b70, roughness: 0.58, metalness: 0.18, side: THREE.DoubleSide
+    });
+    const wardrobeBody = new THREE.Mesh(
+      new THREE.BoxGeometry(0.18, 5.0, 7.0),
+      wardrobeBodyMat
+    );
+    wardrobeBody.position.set(0, 2.5, 0);
+    wardrobeBody.castShadow = true;
+    wardrobeBody.receiveShadow = true;
+    galinesKamurkesFakeSpinta.add(wardrobeBody);
+
+    const wardrobeGreyMat = new THREE.MeshStandardMaterial({
+      color: 0x8b9096, roughness: 0.42, metalness: 0.22, side: THREE.DoubleSide
+    });
+    const wardrobeMirrorMat = new THREE.MeshStandardMaterial({
+      color: 0xcad2d7, roughness: 0.08, metalness: 0.92, side: THREE.DoubleSide
+    });
+    const wardrobeRailMat = new THREE.MeshStandardMaterial({
+      color: 0xd7dde2, roughness: 0.18, metalness: 0.95, side: THREE.DoubleSide
+    });
+
+    // Trys aiškiai matomos „stumdomos durys“ priekinėje (+X) pusėje.
+    const wardrobePanelZ = [-2.30, 0, 2.30];
+    wardrobePanelZ.forEach((z, i) => {
+      const panel = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.18, 4.58),
+        i === 1 ? wardrobeMirrorMat : wardrobeGreyMat
+      );
+      panel.rotation.y = Math.PI / 2;
+      panel.position.set(0.101, 2.52, z);
+      panel.castShadow = true;
+      panel.receiveShadow = true;
+      galinesKamurkesFakeSpinta.add(panel);
+
+      // Tas pats fasadas ir kitoje pusėje, kad matytųsi nepriklausomai nuo priėjimo krypties.
+      const panelBack = panel.clone();
+      panelBack.rotation.y = -Math.PI / 2;
+      panelBack.position.x = -0.101;
+      galinesKamurkesFakeSpinta.add(panelBack);
+    });
+
+    // Sidabriniai vertikalūs profiliai tarp stumdomų durų.
+    [-3.44, -1.15, 1.15, 3.44].forEach(z => {
+      const profile = new THREE.Mesh(
+        new THREE.BoxGeometry(0.07, 4.72, 0.055),
+        wardrobeRailMat
+      );
+      profile.position.set(0.125, 2.52, z);
+      galinesKamurkesFakeSpinta.add(profile);
+      const profileBack = profile.clone();
+      profileBack.position.x = -0.125;
+      galinesKamurkesFakeSpinta.add(profileBack);
+    });
+
+    // Viršutinis ir apatinis sidabriniai stumdomų durų bėgeliai.
+    [0.22, 4.82].forEach(y => {
+      const rail = new THREE.Mesh(
+        new THREE.BoxGeometry(0.075, 0.10, 6.92),
+        wardrobeRailMat
+      );
+      rail.position.set(0.13, y, 0);
+      galinesKamurkesFakeSpinta.add(rail);
+      const railBack = rail.clone();
+      railBack.position.x = -0.13;
+      galinesKamurkesFakeSpinta.add(railBack);
+    });
+
+    scene.add(galinesKamurkesFakeSpinta);
+
     // KAMBARYS: GALINĖ KAMURKĖ
     // ID: galine-kamurke
     // Mažas kabinetas kitame koridoriaus gale, tarp Conference room ir
@@ -16834,6 +17148,43 @@
     // Atkuriame debug režime sukurtas objektų kopijas ir tik tada pritaikome visas išsaugotas pozicijas.
     applySavedDebugClones();
     applySavedDebugTransforms();
+
+    // ============================================================
+    // PM MONITORIUS 1: Windows tipo BLUE SCREEN OF DEATH.
+    // ============================================================
+    const pmMonitor1Object = debugFindObjectByName('pm monitorius 1');
+    if (pmMonitor1Object && pmMonitor1Object.children[1] && pmMonitor1Object.children[1].isMesh) {
+      const bsodCanvas = document.createElement('canvas');
+      bsodCanvas.width = 1024; bsodCanvas.height = 600;
+      const b = bsodCanvas.getContext('2d');
+      b.fillStyle = '#0078d7'; b.fillRect(0, 0, 1024, 600);
+      b.fillStyle = '#ffffff'; b.textAlign = 'left';
+      b.font = '300 96px Segoe UI, Arial, sans-serif'; b.fillText(':(', 92, 145);
+      b.font = '300 31px Segoe UI, Arial, sans-serif';
+      b.fillText('Your PC ran into a problem and needs to restart.', 94, 226);
+      b.fillText("We're just collecting some error info, and then we'll restart for you.", 94, 270);
+      b.font = '300 25px Segoe UI, Arial, sans-serif'; b.fillText('100% complete', 94, 340);
+      b.font = '300 18px Segoe UI, Arial, sans-serif';
+      b.fillText('Stop code: CRITICAL_PROCESS_DIED', 94, 445);
+      const bsodTexture = new THREE.CanvasTexture(bsodCanvas);
+      bsodTexture.colorSpace = THREE.SRGBColorSpace; bsodTexture.minFilter = THREE.LinearFilter;
+      bsodTexture.magFilter = THREE.LinearFilter; bsodTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      pmMonitor1Object.children[1].material = new THREE.MeshBasicMaterial({ map: bsodTexture, toneMapped: false });
+    }
+
+    // ============================================================
+    // DKS MONITORIUS: naudotojo nurodytas „I have no idea what I'm doing“ paveikslėlis.
+    // ============================================================
+    const dksMonitorObjectUI = debugFindObjectByName('dks monitorius');
+    if (dksMonitorObjectUI && dksMonitorObjectUI.children[1] && dksMonitorObjectUI.children[1].isMesh) {
+      const dksImageUrl = 'https://img.izismile.com/img/img5/20120417/640/i_have_no_idea_what_im_doing_meme_640_07.jpg';
+      new THREE.TextureLoader().load(dksImageUrl, (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter;
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        dksMonitorObjectUI.children[1].material = new THREE.MeshBasicMaterial({ map: tex, toneMapped: false });
+      });
+    }
 
     // ============================================================
     // PM MONITORIUS 2: LinkedIn tipo profesionalaus tinklo sąsaja.
