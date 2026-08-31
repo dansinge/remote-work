@@ -497,8 +497,17 @@
     <div id="mobileHint">Kairė – judėjimas<br>Dešinė – dairytis</div>
   </div>
 
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.179.1/examples/jsm/"
+    }
+  }
+  </script>
   <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js';
+    import * as THREE from 'three';
+    import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 
     const unpaidOverlay = document.getElementById('unpaidOverlay');
     let unpaidOverlayOpen = false;
@@ -2604,7 +2613,7 @@
   },
   "ASP KOMPIUTERIO DEZE SU SPINTELE": {
     "position": [
-      -4.25,
+      -4.45,
       0,
       3.2
     ],
@@ -2631,16 +2640,16 @@
       0
     ],
     "scale": [
-      0.81451,
+      1,
       1,
       1
     ]
   },
   "GPE PILKA SPINTELE": {
     "position": [
-      -3.05,
+      -3.95,
       0,
-      12.1
+      11.7
     ],
     "rotation": [
       0,
@@ -2655,9 +2664,9 @@
   },
   "GPE PILKA SPINTELE kopija": {
     "position": [
-      4.05,
+      -3.05,
       0,
-      10.6
+      11.7
     ],
     "rotation": [
       0,
@@ -2672,9 +2681,9 @@
   },
   "GPE PILKA SPINTELE kopija kopija": {
     "position": [
-      4.05,
+      3.7366,
       0,
-      11.6
+      11.68898
     ],
     "rotation": [
       0,
@@ -2689,9 +2698,9 @@
   },
   "GPE PILKA SPINTELE kopija kopija kopija": {
     "position": [
-      3.85,
+      3.7366,
       0,
-      10.8
+      10.68898
     ],
     "rotation": [
       0,
@@ -2706,9 +2715,9 @@
   },
   "GPE PILKA SPINTELE kopija kopija kopija kopija": {
     "position": [
-      4.15,
+      3.7366,
       0,
-      2.9
+      3.48898
     ],
     "rotation": [
       0,
@@ -2743,6 +2752,23 @@
       3.95,
       0,
       3.4
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "tv cabinet prie fusbolo": {
+    "position": [
+      -6.35,
+      0,
+      -8.55
     ],
     "rotation": [
       0,
@@ -3617,9 +3643,9 @@
     "name": "GPE PILKA SPINTELE kopija",
     "sourceName": "GPE PILKA SPINTELE",
     "position": [
-      4.05,
+      -3.05,
       0,
-      10.6
+      11.7
     ],
     "rotation": [
       0,
@@ -3636,9 +3662,47 @@
     "name": "GPE PILKA SPINTELE kopija kopija",
     "sourceName": "GPE PILKA SPINTELE",
     "position": [
-      4.05,
+      3.7366,
       0,
-      11.6
+      11.68898
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "GPE PILKA SPINTELE kopija kopija kopija",
+    "sourceName": "GPE PILKA SPINTELE",
+    "position": [
+      3.7366,
+      0,
+      10.68898
+    ],
+    "rotation": [
+      0,
+      1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "GPE PILKA SPINTELE kopija kopija kopija kopija",
+    "sourceName": "GPE PILKA SPINTELE",
+    "position": [
+      3.7366,
+      0,
+      3.48898
     ],
     "rotation": [
       0,
@@ -3688,44 +3752,6 @@
       1,
       1
     ]
-  },
-  {
-    "name": "GPE PILKA SPINTELE kopija kopija kopija",
-    "sourceName": "GPE PILKA SPINTELE",
-    "position": [
-      3.85,
-      0,
-      10.8
-    ],
-    "rotation": [
-      0,
-      1.5707963,
-      0
-    ],
-    "scale": [
-      1,
-      1,
-      1
-    ]
-  },
-  {
-    "name": "GPE PILKA SPINTELE kopija kopija kopija kopija",
-    "sourceName": "GPE PILKA SPINTELE",
-    "position": [
-      4.15,
-      0,
-      2.9
-    ],
-    "rotation": [
-      0,
-      1.5707963,
-      0
-    ],
-    "scale": [
-      1,
-      1,
-      1
-    ]
   }
 ]; // DEBUG_CLONE_DATA
     const DEBUG_ORIGINAL_HTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
@@ -3738,6 +3764,14 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     document.body.appendChild(renderer.domElement);
+
+    const css3dRenderer = new CSS3DRenderer();
+    css3dRenderer.setSize(window.innerWidth, window.innerHeight);
+    css3dRenderer.domElement.style.position = 'fixed';
+    css3dRenderer.domElement.style.inset = '0';
+    css3dRenderer.domElement.style.pointerEvents = 'none';
+    css3dRenderer.domElement.style.zIndex = '2';
+    document.body.appendChild(css3dRenderer.domElement);
 
 
     // ============================================================
@@ -8490,6 +8524,113 @@
     // Fusbalo stalą pasukame 90° aplink vertikalią Y ašį.
     fusbolas.rotation.y = Math.PI / 2;
     scene.add(fusbolas);
+
+    // ============================================================
+    // CHILL ZONE: TV SPINTELĖ SU TELEVIZORIUMI PRIE FUSBOL0
+    // OBJEKTO PAVADINIMAS: tv cabinet prie fusbolo
+    // Balta žema TV spintelė su dviem uždaromis durelėmis, atviromis
+    // lentynomis centre, plonomis kojelėmis ir dideliu juodu televizoriumi.
+    // ============================================================
+    const chillTvUnit = new THREE.Group();
+    chillTvUnit.name = 'tv cabinet prie fusbolo';
+    chillTvUnit.userData.objectName = 'tv cabinet prie fusbolo';
+
+    const tvCabWhite = new THREE.MeshStandardMaterial({ color: 0xf1f0eb, roughness: 0.72, metalness: 0.03 });
+    const tvCabInside = new THREE.MeshStandardMaterial({ color: 0xd9d8d2, roughness: 0.78, metalness: 0.02 });
+    const tvCabLeg = new THREE.MeshStandardMaterial({ color: 0xb8a27f, roughness: 0.48, metalness: 0.32 });
+    const tvBlack = new THREE.MeshStandardMaterial({ color: 0x08090a, roughness: 0.20, metalness: 0.18 });
+    const tvScreen = new THREE.MeshStandardMaterial({ color: 0x030405, roughness: 0.12, metalness: 0.30 });
+
+    function tvBox(w,h,d,x,y,z,mat,parent=chillTvUnit) {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
+      m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true; parent.add(m); return m;
+    }
+
+    // Spintelės korpusas: ~3.5 m pločio, žemas ir panašus į nuotrauką.
+    tvBox(3.55,0.10,0.78,0,0.92,0,tvCabWhite); // viršus
+    tvBox(3.55,0.10,0.78,0,0.22,0,tvCabWhite); // dugnas
+    tvBox(0.10,0.70,0.78,-1.725,0.57,0,tvCabWhite);
+    tvBox(0.10,0.70,0.78, 1.725,0.57,0,tvCabWhite);
+    tvBox(0.08,0.70,0.74,-0.52,0.57,0,tvCabWhite);
+    tvBox(0.08,0.70,0.74, 0.52,0.57,0,tvCabWhite);
+    // Kairė ir dešinė lygios durelės.
+    tvBox(1.12,0.60,0.055,-1.12,0.57,0.418,tvCabWhite);
+    tvBox(1.12,0.60,0.055, 1.12,0.57,0.418,tvCabWhite);
+    // Centrinės dvi atviros lentynos.
+    tvBox(0.96,0.055,0.72,0,0.56,0,tvCabInside);
+    tvBox(0.96,0.055,0.72,0,0.79,0,tvCabInside);
+    // Plonos šampano / medžio spalvos kojelės.
+    for (const x of [-1.52,1.52]) for (const z of [-0.28,0.28]) {
+      const leg=tvBox(0.075,0.28,0.075,x,0.09,z,tvCabLeg);
+      leg.rotation.z = x < 0 ? -0.035 : 0.035;
+    }
+
+    // Didelis televizorius ant spintelės.
+    tvBox(2.75,1.55,0.10,0,1.78,0,tvBlack);
+    const chillTvScreenMesh = tvBox(2.60,1.40,0.018,0,1.78,0.061,tvScreen);
+    chillTvScreenMesh.name = 'tv ekranas prie fusbolo';
+
+    // Animacinį GIF paliekame kaip CSS3D <img>, kad naršyklė jį tikrai animuotų.
+    // CSS3D neturi WebGL depth testo, todėl animate() cikle rankiniu būdu
+    // paslepiame GIF tik tada, kai žvilgsnio liniją tarp kameros ir TV kerta
+    // vientisa PM ↔ Chill zone siena.
+    let chillTvYoutubeObject = null;
+    {
+      const chillTvGif = document.createElement('img');
+      chillTvGif.src = 'https://i.imgflip.com/6vab7a.gif';
+      chillTvGif.alt = 'TV GIF prie fusbolo';
+      chillTvGif.style.width = '1280px';
+      chillTvGif.style.height = '690px';
+      chillTvGif.style.objectFit = 'cover';
+      chillTvGif.style.display = 'block';
+      chillTvGif.style.background = '#000';
+      chillTvGif.style.pointerEvents = 'none';
+      chillTvGif.style.backfaceVisibility = 'hidden';
+
+      chillTvYoutubeObject = new CSS3DObject(chillTvGif);
+      chillTvYoutubeObject.name = 'tv gif prie fusbolo';
+      chillTvYoutubeObject.position.set(0, 1.78, 0.074);
+      chillTvYoutubeObject.scale.set(2.60 / 1280, 1.40 / 690, 1);
+      chillTvUnit.add(chillTvYoutubeObject);
+    }
+
+    const chillTvOcclusionWorldPos = new THREE.Vector3();
+    function updateChillTvGifOcclusion() {
+      if (!chillTvYoutubeObject || !chillTvYoutubeObject.element) return;
+      chillTvYoutubeObject.getWorldPosition(chillTvOcclusionWorldPos);
+      const wallX = chillRoom.left;
+      const camSide = camera.position.x - wallX;
+      const tvSide = chillTvOcclusionWorldPos.x - wallX;
+      let blockedByPmWall = false;
+
+      if (camSide * tvSide < 0) {
+        const dx = chillTvOcclusionWorldPos.x - camera.position.x;
+        if (Math.abs(dx) > 1e-6) {
+          const t = (wallX - camera.position.x) / dx;
+          if (t > 0 && t < 1) {
+            const hitZ = camera.position.z + (chillTvOcclusionWorldPos.z - camera.position.z) * t;
+            const hitY = camera.position.y + (chillTvOcclusionWorldPos.y - camera.position.y) * t;
+            blockedByPmWall =
+              hitZ >= chillRoom.back - chillRoom.wallThickness &&
+              hitZ <= chillRoom.front + chillRoom.wallThickness &&
+              hitY >= 0 && hitY <= wallHeight;
+          }
+        }
+      }
+
+      chillTvYoutubeObject.element.style.visibility = blockedByPmWall ? 'hidden' : 'visible';
+    }
+
+    function startChillTvYoutube() {}
+    // TV kaklelis ir plati stovo bazė.
+    tvBox(0.18,0.18,0.18,0,0.965,0,tvBlack);
+    tvBox(0.92,0.075,0.38,0,1.00,0,tvBlack);
+
+    // Prie fusbolo, Chill zone gilumoje. Visą komplektą galima perkelti per F3 debug.
+    chillTvUnit.position.set(fusbolas.position.x + 3.15, 0, fusbolas.position.z - 1.65);
+    chillTvUnit.rotation.y = -Math.PI / 2;
+    scene.add(chillTvUnit);
+    debugCollisionObjects.add(chillTvUnit);
 
     // CHILL ZONE KORIDORIAUS SIENA – STIKLINĖ.
     // Visa siena, atsukta į koridorių / Supporto kabinetą, pakeista stiklu.
@@ -16684,6 +16825,7 @@
     startButton.addEventListener('click', () => {
       // Vartotojo paspaudimas garantuotai leidžia paleisti projektoriaus animaciją net griežtesnėse naršyklėse.
       playConferenceProjection();
+      startChillTvYoutube();
       if (isTouchDevice) {
         start.style.display = 'none';
         locked = true;
@@ -18687,7 +18829,10 @@
       updatePerformanceCulling(performance.now());
       updateDebugView();
 
+      updateChillTvGifOcclusion();
+
       renderer.render(scene, camera);
+      css3dRenderer.render(scene, camera);
     }
 
     // ASP stacionaraus kompiuterio dėžė ant mažos pilkos spintelės
@@ -18725,6 +18870,18 @@
     aspPcSetup.add(aspPcGlow);
     scene.add(aspPcSetup);
 
+    // ASP PC setup sukuriamas jau PO bendro applySavedDebugTransforms() kvietimo,
+    // todėl jo išsaugotą DEBUG poziciją pritaikome čia atskirai.
+    // Taip po „Išsaugoti HTML“ jis nebegrįš į hardcodintą vietą prie kėdės.
+    {
+      const tr = DEBUG_SAVED_TRANSFORMS[aspPcSetup.name];
+      if (tr) {
+        if (tr.position) aspPcSetup.position.fromArray(tr.position);
+        if (tr.rotation) aspPcSetup.rotation.fromArray(tr.rotation);
+        if (tr.scale) aspPcSetup.scale.fromArray(tr.scale);
+      }
+    }
+
     // GPE stalo maža pilka spintelė – tokia pati kaip prie ASP, tik be kompiuterio dėžės
     const gpeCabinetSetup = new THREE.Group();
     gpeCabinetSetup.name = 'GPE PILKA SPINTELE';
@@ -18756,6 +18913,7 @@
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      css3dRenderer.setSize(window.innerWidth, window.innerHeight);
     });
 
 
