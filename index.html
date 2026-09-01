@@ -2814,23 +2814,6 @@
       1,
       1
     ]
-  },
-  "mini pool table spintele prie tv": {
-    "position": [
-      2.29513,
-      0,
-      -0.00608
-    ],
-    "rotation": [
-      0,
-      3.1415927,
-      0
-    ],
-    "scale": [
-      1,
-      1,
-      1
-    ]
   }
 }; // DEBUG_SAVE_DATA
     // DEBUG_CLONE_DATA: debug režime sukurtos objektų kopijos.
@@ -9696,54 +9679,280 @@
     scene.add(coffeeMachine);
 
     // ============================================================
-    // OBJEKTAS: ŠALDYTUVAS
-    // Šviesiai gelsvos sviesto spalvos šaldytuvas stovi SPINTELĖS 3 kairėje,
-    // visiškai priglaustas prie jos be jokio tarpo. Fasadas, kaip ir spintelių,
-    // nukreiptas į -X pusę.
+    // OBJEKTAS: ŠALDYTUVAS – atidaromas, su vidumi ir 2 lentynomis
     // ============================================================
     const fridgeWidthX = 0.82;
     const fridgeDepthZ = 1.05;
     const fridgeHeight = 2.18;
-    const fridgeMat = new THREE.MeshStandardMaterial({
-      color: 0xf3dfa0,
-      roughness: 0.62,
-      metalness: 0.04
-    });
-    const fridge = new THREE.Mesh(
-      new THREE.BoxGeometry(fridgeWidthX, fridgeHeight, fridgeDepthZ),
-      fridgeMat
-    );
-    fridge.position.set(
-      kitchenCabinet3.position.x,
-      fridgeHeight / 2,
-      kitchenCabinet3.position.z - 1.45 / 2 - fridgeDepthZ / 2
-    );
-    fridge.castShadow = true;
-    fridge.receiveShadow = true;
+    const fridgeMat = new THREE.MeshStandardMaterial({ color: 0xf3dfa0, roughness: 0.62, metalness: 0.04 });
+    const fridgeInsideMat = new THREE.MeshStandardMaterial({ color: 0xf4f5ef, roughness: 0.72, metalness: 0.01 });
+    const fridgeShelfMat = new THREE.MeshStandardMaterial({ color: 0xdde4e1, roughness: 0.35, metalness: 0.08, transparent: true, opacity: 0.82 });
+
+    const fridge = new THREE.Group();
+    fridge.position.set(kitchenCabinet3.position.x, 0, kitchenCabinet3.position.z - 1.45 / 2 - fridgeDepthZ / 2);
     fridge.name = 'saldytuvas';
     fridge.userData.objectName = 'saldytuvas';
     scene.add(fridge);
 
-    // Vienos durys: fasade nėra horizontalios siūlės, skiriančios šaldytuvą į dvi dalis.
-    const fridgeFrontX = fridge.position.x - fridgeWidthX / 2 - 0.006;
+    // Korpusas be priekinės sienos, kad atidarius duris matytųsi tikras vidus.
+    const wallT = 0.065;
+    function addFridgePanel(geo, x, y, z, mat = fridgeInsideMat) {
+      const m = new THREE.Mesh(geo, mat); m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true; fridge.add(m); return m;
+    }
+    addFridgePanel(new THREE.BoxGeometry(fridgeWidthX, wallT, fridgeDepthZ), 0, wallT/2, 0, fridgeMat);
+    addFridgePanel(new THREE.BoxGeometry(fridgeWidthX, wallT, fridgeDepthZ), 0, fridgeHeight-wallT/2, 0, fridgeMat);
+    // Šoninės sienelės paliekamos Z kraštuose, kad atidarius duris anga ir vidus būtų tiesiai už jų.
+    addFridgePanel(new THREE.BoxGeometry(fridgeWidthX, fridgeHeight, wallT), 0, fridgeHeight/2, -fridgeDepthZ/2+wallT/2, fridgeMat);
+    addFridgePanel(new THREE.BoxGeometry(fridgeWidthX, fridgeHeight, wallT), 0, fridgeHeight/2,  fridgeDepthZ/2-wallT/2, fridgeMat);
+    // Galinė vidaus sienelė (+X pusėje; priekis yra -X).
+    addFridgePanel(new THREE.BoxGeometry(wallT, fridgeHeight-wallT*2, fridgeDepthZ-wallT*2), fridgeWidthX/2-wallT*1.35, fridgeHeight/2, 0, fridgeInsideMat);
 
-    // Viena plona tamsesnė rankenėlė ant vienintelių šaldytuvo durų.
-    const fridgeHandleMat = new THREE.MeshStandardMaterial({
-      color: 0x8d846c,
-      roughness: 0.38,
-      metalness: 0.45
+    // Dvi horizontalios lentynos šaldytuvo viduje.
+    [0.78, 1.43].forEach((y, i) => {
+      const shelf = new THREE.Mesh(new THREE.BoxGeometry(fridgeWidthX-wallT*2.6, 0.035, fridgeDepthZ-wallT*2.4), fridgeShelfMat);
+      shelf.position.set(0.015, y, 0); shelf.name = `saldytuvo lentyna ${i+1}`; shelf.castShadow=true; shelf.receiveShadow=true; fridge.add(shelf);
     });
-    const fridgeHandle = new THREE.Mesh(
-      new THREE.BoxGeometry(0.035, 0.52, 0.045),
-      fridgeHandleMat
-    );
-    fridgeHandle.position.set(
-      fridge.position.x - fridgeWidthX / 2 - 0.026,
-      1.12,
-      fridge.position.z + fridgeDepthZ * 0.31
-    );
-    fridgeHandle.castShadow = true;
-    scene.add(fridgeHandle);
+
+    // ------------------------------------------------------------
+    // PRODUKTAI ŠALDYTUVO VIDUJE
+    // Viršutinė lentyna: medinė lentutė su keliomis rūkytomis dešromis.
+    // Vidurinė lentyna: keli šampano buteliai.
+    // ------------------------------------------------------------
+    const fridgeFoodGroup = new THREE.Group();
+    fridgeFoodGroup.name = 'saldytuvo produktai';
+    fridge.add(fridgeFoodGroup);
+
+    // --- Viršutinė lentyna: lentutė + dešros ---
+    const sausageBoardMat = new THREE.MeshStandardMaterial({ color: 0xb77942, roughness: 0.8, metalness: 0.0 });
+    const sausageBoard = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.028, 0.64), sausageBoardMat);
+    sausageBoard.position.set(-0.04, 1.468, 0.0);
+    sausageBoard.rotation.y = 0.08;
+    sausageBoard.castShadow = true;
+    sausageBoard.receiveShadow = true;
+    sausageBoard.name = 'desru lentele';
+    fridgeFoodGroup.add(sausageBoard);
+
+    // Nedidelė rankena kaip pateiktame medinės lentutės pavyzdyje.
+    const boardHandle = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.024, 0.13), sausageBoardMat);
+    boardHandle.position.set(-0.14, 1.47, -0.34);
+    boardHandle.rotation.y = 0.08;
+    boardHandle.castShadow = true;
+    fridgeFoodGroup.add(boardHandle);
+
+    const sausageMat = new THREE.MeshStandardMaterial({ color: 0x9f3f28, roughness: 0.74, metalness: 0.0 });
+    const sausageEndMat = new THREE.MeshStandardMaterial({ color: 0xd9897c, roughness: 0.78, metalness: 0.0 });
+    function makeFridgeSausage(index, length = 0.48) {
+      const g = new THREE.Group();
+      g.name = `desra ${index}`;
+      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, length, 18), sausageMat);
+      // Paguldome cilindrą horizontaliai išilgai Z krypties.
+      body.rotation.x = Math.PI / 2;
+      body.castShadow = true;
+      body.receiveShadow = true;
+      g.add(body);
+
+      // Rausvas pjūvis viename gale, kad primintų nuotrauką.
+      const cut = new THREE.Mesh(new THREE.CircleGeometry(0.052, 18), sausageEndMat);
+      cut.rotation.x = Math.PI / 2;
+      cut.position.z = -length / 2 - 0.001;
+      cut.castShadow = true;
+      g.add(cut);
+      return g;
+    }
+
+    const sausage1 = makeFridgeSausage(1, 0.48);
+    sausage1.position.set(-0.08, 1.525, -0.02);
+    sausage1.rotation.y = -0.10;
+    fridgeFoodGroup.add(sausage1);
+
+    const sausage2 = makeFridgeSausage(2, 0.45);
+    sausage2.position.set(0.055, 1.525, 0.07);
+    sausage2.rotation.y = 0.16;
+    fridgeFoodGroup.add(sausage2);
+
+    const sausage3 = makeFridgeSausage(3, 0.39);
+    sausage3.position.set(-0.015, 1.575, 0.02);
+    sausage3.rotation.y = 0.04;
+    fridgeFoodGroup.add(sausage3);
+
+    // --- Vidurinė lentyna: šampano buteliai ---
+    const champagneGlassMat = new THREE.MeshStandardMaterial({ color: 0x244d2f, roughness: 0.32, metalness: 0.08 });
+    const champagneFoilMat = new THREE.MeshStandardMaterial({ color: 0xc8a24a, roughness: 0.38, metalness: 0.5 });
+    const champagneLabelMat = new THREE.MeshStandardMaterial({ color: 0xf2ead0, roughness: 0.68, metalness: 0.0 });
+
+    function makeChampagneBottle(index) {
+      const g = new THREE.Group();
+      g.name = `sampano butelis ${index}`;
+
+      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.058, 0.32, 20), champagneGlassMat);
+      body.position.y = 0.16;
+      body.castShadow = true;
+      body.receiveShadow = true;
+      g.add(body);
+
+      const shoulder = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.052, 0.09, 20), champagneGlassMat);
+      shoulder.position.y = 0.365;
+      shoulder.castShadow = true;
+      g.add(shoulder);
+
+      const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.023, 0.028, 0.13, 18), champagneGlassMat);
+      neck.position.y = 0.475;
+      neck.castShadow = true;
+      g.add(neck);
+
+      const foil = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.072, 18), champagneFoilMat);
+      foil.position.y = 0.56;
+      foil.castShadow = true;
+      g.add(foil);
+
+      // Šviesi etiketė priekinėje (-X) butelio pusėje.
+      const label = new THREE.Mesh(new THREE.BoxGeometry(0.004, 0.10, 0.072), champagneLabelMat);
+      label.position.set(-0.0575, 0.22, 0);
+      g.add(label);
+
+      return g;
+    }
+
+    [-0.24, 0, 0.24].forEach((z, i) => {
+      const bottle = makeChampagneBottle(i + 1);
+      bottle.position.set(-0.03, 0.802, z);
+      bottle.rotation.y = (i - 1) * 0.08;
+      fridgeFoodGroup.add(bottle);
+    });
+
+    // Durys sukasi apie kairį kraštą (žiūrint į fasadą iš -X pusės).
+    const fridgeDoorPivot = new THREE.Group();
+    fridgeDoorPivot.position.set(-fridgeWidthX/2 - 0.012, 0, -fridgeDepthZ/2);
+    fridge.add(fridgeDoorPivot);
+    const fridgeDoor = new THREE.Mesh(new THREE.BoxGeometry(0.075, fridgeHeight-0.035, fridgeDepthZ), fridgeMat);
+    fridgeDoor.position.set(-0.0375, fridgeHeight/2, fridgeDepthZ/2);
+    fridgeDoor.castShadow=true; fridgeDoor.receiveShadow=true; fridgeDoor.name='saldytuvo durys';
+    fridgeDoorPivot.add(fridgeDoor);
+
+    // Gilios, uždaresnės lentynėlės / kišenės vidinėje šaldytuvo durų pusėje.
+    // Jos yra durų grupėje, todėl atsidaro ir užsidaro kartu su durimis.
+    const fridgeDoorShelfMat = new THREE.MeshStandardMaterial({ color: 0xe8ece8, roughness: 0.58, metalness: 0.02 });
+    const fridgeDoorShelfFrontMat = new THREE.MeshStandardMaterial({ color: 0xd7dfdc, roughness: 0.5, metalness: 0.03, transparent: true, opacity: 0.9 });
+    function addFridgeDoorBin(y, index) {
+      const bin = new THREE.Group();
+      bin.name = `saldytuvo duru lentyna ${index}`;
+      // Durų vidinė pusė yra +X kryptimi nuo durų plokštumos.
+      bin.position.set(0.035, y, fridgeDepthZ / 2);
+
+      const depth = 0.23;       // gilesnė kišenė daiktams
+      const width = 0.78;       // beveik per visą durų plotį (Z kryptimi)
+      const bottomT = 0.035;
+      const wallH = 0.17;
+      const wallT2 = 0.035;
+
+      const bottom = new THREE.Mesh(new THREE.BoxGeometry(depth, bottomT, width), fridgeDoorShelfMat);
+      bottom.position.set(depth / 2, 0, 0);
+      bottom.castShadow = true; bottom.receiveShadow = true; bin.add(bottom);
+
+      // Aukštesnis priekinis bortelis, kad lentyna atrodytų uždaresnė.
+      const front = new THREE.Mesh(new THREE.BoxGeometry(wallT2, wallH, width), fridgeDoorShelfFrontMat);
+      front.position.set(depth - wallT2 / 2, wallH / 2, 0);
+      front.castShadow = true; front.receiveShadow = true; bin.add(front);
+
+      // Abu šoniniai borteliai.
+      [-1, 1].forEach(side => {
+        const sideWall = new THREE.Mesh(new THREE.BoxGeometry(depth, wallH, wallT2), fridgeDoorShelfMat);
+        sideWall.position.set(depth / 2, wallH / 2, side * (width / 2 - wallT2 / 2));
+        sideWall.castShadow = true; sideWall.receiveShadow = true; bin.add(sideWall);
+      });
+
+      fridgeDoorPivot.add(bin);
+      return bin;
+    }
+    const fridgeDoorBinBottom = addFridgeDoorBin(0.43, 1);
+    const fridgeDoorBinMiddle = addFridgeDoorBin(1.02, 2);
+    const fridgeDoorBinTop = addFridgeDoorBin(1.61, 3);
+
+    // Keli „Margė“ pieno pakeliai apatinėje šaldytuvo durų lentynoje.
+    // Sukurti kaip 3D kartoniniai pakeliai pagal pateiktą pavyzdį: balti,
+    // su juodomis karvutės dėmėmis, raudonu „margė“ užrašu ir raudonu kamšteliu.
+    function makeMargeMilkCarton(index = 1) {
+      const carton = new THREE.Group();
+      carton.name = `marge pienas ${index}`;
+      carton.userData.objectName = carton.name;
+
+      const cartonW = 0.145;
+      const cartonH = 0.37;
+      const cartonD = 0.125;
+
+      // Canvas tekstūra leidžia ant pakelio turėti panašų grafinį dizainą be išorinio failo.
+      const cv = document.createElement('canvas');
+      cv.width = 256; cv.height = 512;
+      const ctx = cv.getContext('2d');
+      ctx.fillStyle = '#fafafa'; ctx.fillRect(0, 0, cv.width, cv.height);
+      // Juodos karvutės dėmės.
+      ctx.fillStyle = '#151515';
+      [[28,52,42,30],[205,82,50,38],[36,210,54,45],[205,286,48,58],[62,410,68,46]].forEach(([x,y,rx,ry]) => {
+        ctx.beginPath(); ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2); ctx.fill();
+      });
+      // Žolė apačioje.
+      ctx.fillStyle = '#45a53b'; ctx.fillRect(0, 468, 256, 44);
+      for (let x=0; x<256; x+=12) {
+        ctx.beginPath(); ctx.moveTo(x,468); ctx.lineTo(x+6,442-Math.random()*18); ctx.lineTo(x+11,468); ctx.fill();
+      }
+      // Pagrindinis raudonas užrašas.
+      ctx.save();
+      ctx.translate(132, 305); ctx.rotate(-Math.PI/2);
+      ctx.fillStyle = '#cf1830'; ctx.font = 'bold 94px Georgia, serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('margė', 0, 0);
+      ctx.restore();
+      ctx.fillStyle = '#222'; ctx.font = 'bold 20px Arial'; ctx.fillText('3,2%', 18, 430);
+      ctx.font = '18px Arial'; ctx.fillText('1 L', 18, 454);
+
+      const tex = new THREE.CanvasTexture(cv);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+      const cartonMat = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.7, metalness: 0.0 });
+      const body = new THREE.Mesh(new THREE.BoxGeometry(cartonW, cartonH, cartonD), cartonMat);
+      body.position.y = cartonH / 2;
+      body.castShadow = true; body.receiveShadow = true;
+      carton.add(body);
+
+      // Šiek tiek nuožulnus kartono viršus.
+      const topMat = new THREE.MeshStandardMaterial({ color: 0xf2f2f2, roughness: 0.7 });
+      const top = new THREE.Mesh(new THREE.BoxGeometry(cartonW * 0.94, 0.035, cartonD * 0.9), topMat);
+      top.position.set(0, cartonH + 0.012, 0);
+      top.rotation.z = -0.08;
+      top.castShadow = true; carton.add(top);
+
+      // Raudonas užsukamas kamštelis.
+      const capMat = new THREE.MeshStandardMaterial({ color: 0xc81426, roughness: 0.48, metalness: 0.02 });
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.016, 18), capMat);
+      cap.rotation.z = Math.PI / 2;
+      cap.position.set(cartonW * 0.18, cartonH + 0.035, -cartonD * 0.08);
+      cap.castShadow = true; carton.add(cap);
+
+      return carton;
+    }
+
+    // Apatinė durų lentyna: trys pakeliai vienas šalia kito.
+    [-0.22, 0, 0.22].forEach((z, i) => {
+      const milk = makeMargeMilkCarton(i + 1);
+      milk.position.set(0.12, 0.02, z);
+      // Etiketės priekinė pusė atsukta į durų vidų / žaidėją atidarius šaldytuvą.
+      milk.rotation.y = Math.PI / 2;
+      fridgeDoorBinBottom.add(milk);
+    });
+
+    const fridgeHandleMat = new THREE.MeshStandardMaterial({ color: 0x8d846c, roughness: 0.38, metalness: 0.45 });
+    const fridgeHandle = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.52, 0.045), fridgeHandleMat);
+    fridgeHandle.position.set(-0.082, 1.12, fridgeDepthZ*0.81);
+    fridgeHandle.castShadow=true; fridgeHandle.name='saldytuvo rankena'; fridgeDoorPivot.add(fridgeHandle);
+
+    let fridgeDoorOpen = false;
+    let fridgeHandleAimed = false;
+    const fridgeHandleNormalColor = fridgeHandleMat.color.clone();
+    const fridgeHandleHintColor = new THREE.Color(0xff3030);
+    function getFridgeHandleAimScore() { return getDoorHandleAimScore(fridgeDoorPivot, fridgeHandle); }
+    function updateFridgeHandleHint() {
+      fridgeHandleAimed = locked && getFridgeHandleAimScore() > 0.9935;
+      fridgeHandleMat.color.copy(fridgeHandleAimed ? fridgeHandleHintColor : fridgeHandleNormalColor);
+    }
 
 
     // ============================================================
@@ -17194,7 +17403,8 @@
       }
 
       let text = '';
-      if (moteruHandleAimed) text = moteruDoorOpen ? 'Uždaryti duris' : 'Atidaryti duris';
+      if (fridgeHandleAimed) text = fridgeDoorOpen ? 'Uždaryti šaldytuvą' : 'Atidaryti šaldytuvą';
+      else if (moteruHandleAimed) text = moteruDoorOpen ? 'Uždaryti duris' : 'Atidaryti duris';
       else if (vyruHandleAimed) text = vyruDoorOpen ? 'Uždaryti duris' : 'Atidaryti duris';
       else if (liftas1UpButtonAimed) text = 'Kilti aukštyn';
       else if (liftas1DownButtonAimed) text = 'Leistis žemyn';
@@ -17560,18 +17770,7 @@
     const lift1CameraForward = new THREE.Vector3();
     let lift1ButtonAimed = false;
 
-    function isCameraInsideLiftRoom() {
-      // Lifto iškvietimo veiksmas rodomas tik fiziškai esant LIFTŲ kambaryje.
-      // Taip mygtuko nebegalima "matyti" / aktyvuoti per VIRTUVĖLĖS sieną.
-      const margin = 0.08;
-      return camera.position.x >= liftRoom.left + margin &&
-             camera.position.x <= liftRoom.right - margin &&
-             camera.position.z >= liftRoom.front + margin &&
-             camera.position.z <= liftRoom.back - margin;
-    }
-
     function getLift1ButtonAimScore() {
-      if (!isCameraInsideLiftRoom()) return -Infinity;
       camera.updateMatrixWorld(true);
       liftCallButton.updateMatrixWorld(true);
       liftCallButton.getWorldPosition(lift1ButtonWorldPos);
@@ -17599,7 +17798,6 @@
     let lift2ButtonAimed = false;
 
     function getLift2ButtonAimScore() {
-      if (!isCameraInsideLiftRoom()) return -Infinity;
       // Iškvietimo mygtukas turi veikti ir 1 aukšte.
       // Nusileidus LIFTU 1, LIFTAS 2 taip pat perkeliamas į 1 aukštą, todėl
       // liftas2AtFirstFloor negali blokuoti jo iškvietimo / durų atidarymo.
@@ -17673,6 +17871,11 @@
           id: 'chill-sofa',
           score: chillSofaAimed ? 1.015 : -Infinity,
           toggle: () => { sleepOnChillSofa(); }
+        },
+        {
+          id: 'saldytuvas',
+          score: getFridgeHandleAimScore(),
+          toggle: () => { fridgeDoorOpen = !fridgeDoorOpen; }
         },
         {
           id: 'moteru',
@@ -18982,6 +19185,10 @@
       updateLiftas2Door(delta);
       updateLiftas2Countdown(delta);
       updateLiftas2UpCountdown(delta);
+      // Šaldytuvo durų animacija.
+      const fridgeDoorTarget = fridgeDoorOpen ? -Math.PI * 0.62 : 0;
+      fridgeDoorPivot.rotation.y += (fridgeDoorTarget - fridgeDoorPivot.rotation.y) * Math.min(1, delta * 8);
+      updateFridgeHandleHint();
       updateMoteruDoorHandleHint();
       updateVyruDoorHandleHint();
       updateLiftas1UpButtonHint();
