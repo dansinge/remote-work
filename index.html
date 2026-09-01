@@ -2814,6 +2814,23 @@
       1,
       1
     ]
+  },
+  "mini pool table spintele prie tv": {
+    "position": [
+      2.29513,
+      0,
+      -0.00608
+    ],
+    "rotation": [
+      0,
+      3.1415927,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
   }
 }; // DEBUG_SAVE_DATA
     // DEBUG_CLONE_DATA: debug režime sukurtos objektų kopijos.
@@ -8722,6 +8739,80 @@
     // TV kaklelis ir plati stovo bazė.
     tvBox(0.18,0.18,0.18,0,0.965,0,tvBlack);
     tvBox(0.92,0.075,0.38,0,1.00,0,tvBlack);
+
+    // ============================================================
+    // PRIE TV: MAŽA PILKA SPINTELĖ + MINI POOL / BILIARDO STALIUKAS
+    // Pastatyta tik viena, dešinėje TV spintelės pusėje.
+    // Visa grupė prikabinta prie chillTvUnit, todėl juda kartu su TV per debug.
+    // ============================================================
+    const miniPoolStand = new THREE.Group();
+    miniPoolStand.name = 'mini pool table spintele prie tv';
+    miniPoolStand.userData.objectName = 'mini pool table spintele prie tv';
+
+    const miniCabGrey = new THREE.MeshStandardMaterial({ color: 0x74787d, roughness: 0.72, metalness: 0.10 });
+    const miniCabDark = new THREE.MeshStandardMaterial({ color: 0x3b3f43, roughness: 0.60, metalness: 0.18 });
+    const poolWood = new THREE.MeshStandardMaterial({ color: 0x8a5b3d, roughness: 0.72, metalness: 0.02 });
+    const poolBlack = new THREE.MeshStandardMaterial({ color: 0x151719, roughness: 0.52, metalness: 0.10 });
+    const poolGreen = new THREE.MeshStandardMaterial({ color: 0x1f7749, roughness: 0.88, metalness: 0.0 });
+    const poolWhite = new THREE.MeshStandardMaterial({ color: 0xf2f0df, roughness: 0.42, metalness: 0.0 });
+    const cueMat = new THREE.MeshStandardMaterial({ color: 0xb98a58, roughness: 0.68, metalness: 0.0 });
+
+    function miniPoolBox(w,h,d,x,y,z,mat,parent=miniPoolStand) {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
+      m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true; parent.add(m); return m;
+    }
+
+    // Maža pilka spintelė prie pat TV spintelės.
+    miniPoolBox(0.86,0.66,0.66, 0,0.39,0, miniCabGrey);
+    miniPoolBox(0.72,0.035,0.035, 0,0.49,0.347, miniCabDark);
+    miniPoolBox(0.72,0.035,0.035, 0,0.27,0.347, miniCabDark);
+    for (const x of [-0.29, 0.29]) {
+      const handle = miniPoolBox(0.13,0.025,0.035, x,0.49,0.372, poolBlack);
+      handle.rotation.z = 0;
+    }
+
+    // Mini biliardo stalo medinis korpusas ir juodas bortelis.
+    miniPoolBox(1.04,0.18,0.68, 0,0.86,0, poolWood);
+    miniPoolBox(1.08,0.075,0.72, 0,0.975,0, poolBlack);
+    miniPoolBox(0.91,0.045,0.55, 0,1.018,0, poolGreen);
+
+    // Šešios kišenės.
+    const pocketGeom = new THREE.CylinderGeometry(0.055,0.055,0.028,18);
+    const pocketPos = [
+      [-0.47,-0.29], [0,-0.29], [0.47,-0.29],
+      [-0.47, 0.29], [0, 0.29], [0.47, 0.29]
+    ];
+    for (const [x,z] of pocketPos) {
+      const p = new THREE.Mesh(pocketGeom,poolBlack);
+      p.rotation.x = Math.PI/2; p.position.set(x,1.047,z); p.castShadow=true; miniPoolStand.add(p);
+    }
+
+    // Kamuoliukai: trikampis spalvotų kamuoliukų + baltas mušamasis.
+    const ballColors = [0xf2c230,0x1c4fb7,0xd33b32,0x8b2ca0,0xf07b27,0x2f7f45,0x7a2432,0x1c1d1f,0xf0d336,0x3264c7];
+    const ballGeom = new THREE.SphereGeometry(0.045,16,12);
+    let bi=0;
+    for (let row=0; row<4; row++) {
+      for (let col=0; col<=row; col++) {
+        const b = new THREE.Mesh(ballGeom,new THREE.MeshStandardMaterial({color:ballColors[bi++%ballColors.length],roughness:0.32}));
+        b.position.set(0.19 + row*0.078,1.078,(col-row/2)*0.085); b.castShadow=true; miniPoolStand.add(b);
+      }
+    }
+    const cueBall = new THREE.Mesh(ballGeom,poolWhite);
+    cueBall.position.set(-0.28,1.078,0.05); cueBall.castShadow=true; miniPoolStand.add(cueBall);
+
+    // Du ploni kijai padėti skersai stalo.
+    const cueGeom = new THREE.CylinderGeometry(0.012,0.018,0.82,10);
+    for (let i=0;i<2;i++) {
+      const cue = new THREE.Mesh(cueGeom,cueMat);
+      cue.rotation.z = Math.PI/2;
+      cue.rotation.y = (i ? 0.16 : -0.12);
+      cue.position.set(-0.08,1.095,(i ? -0.12 : 0.14));
+      cue.castShadow=true; miniPoolStand.add(cue);
+    }
+
+    // Dešiniau pagrindinės TV spintelės; tarpas mažas, kad atrodytų kaip atskira spintelė šalia TV.
+    miniPoolStand.position.set(2.30,0,0.02);
+    chillTvUnit.add(miniPoolStand);
 
     // Prie fusbolo, Chill zone gilumoje. Visą komplektą galima perkelti per F3 debug.
     chillTvUnit.position.set(fusbolas.position.x + 3.15, 0, fusbolas.position.z - 1.65);
@@ -17469,7 +17560,18 @@
     const lift1CameraForward = new THREE.Vector3();
     let lift1ButtonAimed = false;
 
+    function isCameraInsideLiftRoom() {
+      // Lifto iškvietimo veiksmas rodomas tik fiziškai esant LIFTŲ kambaryje.
+      // Taip mygtuko nebegalima "matyti" / aktyvuoti per VIRTUVĖLĖS sieną.
+      const margin = 0.08;
+      return camera.position.x >= liftRoom.left + margin &&
+             camera.position.x <= liftRoom.right - margin &&
+             camera.position.z >= liftRoom.front + margin &&
+             camera.position.z <= liftRoom.back - margin;
+    }
+
     function getLift1ButtonAimScore() {
+      if (!isCameraInsideLiftRoom()) return -Infinity;
       camera.updateMatrixWorld(true);
       liftCallButton.updateMatrixWorld(true);
       liftCallButton.getWorldPosition(lift1ButtonWorldPos);
@@ -17497,6 +17599,7 @@
     let lift2ButtonAimed = false;
 
     function getLift2ButtonAimScore() {
+      if (!isCameraInsideLiftRoom()) return -Infinity;
       // Iškvietimo mygtukas turi veikti ir 1 aukšte.
       // Nusileidus LIFTU 1, LIFTAS 2 taip pat perkeliamas į 1 aukštą, todėl
       // liftas2AtFirstFloor negali blokuoti jo iškvietimo / durų atidarymo.
@@ -19003,8 +19106,56 @@
     }
     scene.add(gpeCabinetSetup);
 
+    // ZZ tipo augalas tik ant DLU spintelės (pagal pateiktą nuotrauką).
+    const gpeDluPlant = new THREE.Group();
+    gpeDluPlant.name = 'DLU AUGALAS';
+    gpeDluPlant.userData.objectName = 'DLU AUGALAS';
+    // Augalas bus pridėtas tik prie DLU spintelės klono, todėl judės kartu su ja per debug režimą.
+    gpeDluPlant.position.set(0, 0.90, 0);
+
+    const plantPotMat = new THREE.MeshStandardMaterial({ color: 0xf2f0e8, roughness: 0.72 });
+    const plantSoilMat = new THREE.MeshStandardMaterial({ color: 0x2b2118, roughness: 1.0 });
+    const plantStemMat = new THREE.MeshStandardMaterial({ color: 0x4f7130, roughness: 0.8 });
+    const plantLeafMat = new THREE.MeshStandardMaterial({ color: 0x1f6a2d, roughness: 0.62, side: THREE.DoubleSide });
+
+    const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.29, 0.24, 0.42, 18), plantPotMat);
+    pot.position.y = 0.21; pot.castShadow = true; gpeDluPlant.add(pot);
+    const soil = new THREE.Mesh(new THREE.CylinderGeometry(0.265, 0.265, 0.025, 18), plantSoilMat);
+    soil.position.y = 0.425; gpeDluPlant.add(soil);
+
+    function addZZStem(x, z, h, leanX, leanZ, leafCount, phase=0) {
+      const stemGroup = new THREE.Group();
+      stemGroup.position.set(x, 0.43, z);
+      stemGroup.rotation.z = leanX;
+      stemGroup.rotation.x = leanZ;
+      const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.025, h, 8), plantStemMat);
+      stem.position.y = h / 2; stem.castShadow = true; stemGroup.add(stem);
+      for (let i = 0; i < leafCount; i++) {
+        const y = h * (0.28 + (i / Math.max(1, leafCount - 1)) * 0.62);
+        const side = i % 2 === 0 ? -1 : 1;
+        const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.105, 10, 7), plantLeafMat);
+        leaf.scale.set(1.45, 0.38, 0.68);
+        leaf.position.set(side * (0.09 + 0.018 * i), y, 0);
+        leaf.rotation.z = side * (0.38 + 0.04 * i);
+        leaf.rotation.y = phase + side * 0.22;
+        leaf.castShadow = true;
+        stemGroup.add(leaf);
+      }
+      const topLeaf = new THREE.Mesh(new THREE.SphereGeometry(0.105, 10, 7), plantLeafMat);
+      topLeaf.scale.set(1.3, 0.42, 0.7);
+      topLeaf.position.set(0, h + 0.02, 0);
+      topLeaf.rotation.z = 0.08; topLeaf.castShadow = true; stemGroup.add(topLeaf);
+      gpeDluPlant.add(stemGroup);
+    }
+
+    addZZStem(-0.12,  0.02, 0.92,  0.18, -0.05, 6, 0.1);
+    addZZStem(-0.04, -0.06, 1.12,  0.08,  0.02, 7, 0.4);
+    addZZStem( 0.06,  0.02, 1.22, -0.08, -0.03, 7, 0.7);
+    addZZStem( 0.14, -0.02, 0.98, -0.18,  0.04, 6, 1.0);
+    addZZStem( 0.01,  0.10, 0.78,  0.24,  0.05, 5, 1.3);
+
     // Tokios pačios pilkos spintelės prie DLU, GLE, N ir ODA stalų.
-    // Klonuojame visą GPE spintelės grupę, todėl matmenys, medžiagos ir stalviršis lieka identiški.
+    // Klonuojame tik spintelę be augalo; augalas bus pridėtas tik DLU spintelių klonui.
     const extraDeskCabinets = [
       { name: 'DLU PILKA SPINTELE', position: [-3.35, 0.00, 11.70], rotationY: Math.PI / 2 },
       { name: 'GLE PILKA SPINTELE', position: [ 3.85, 0.00, 10.70], rotationY: Math.PI / 2 },
@@ -19027,6 +19178,12 @@
         if (tr.rotation) clone.rotation.fromArray(tr.rotation);
         if (tr.scale) clone.scale.fromArray(tr.scale);
       }
+
+      // Tik viena gėlė: ant spintelės prie DLU stalo.
+      if (cfg.name === 'DLU PILKA SPINTELE') {
+        clone.add(gpeDluPlant);
+      }
+
       scene.add(clone);
     }
 
