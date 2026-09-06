@@ -422,6 +422,8 @@
       opacity: 0; transition: opacity .55s ease; text-align: center;
     }
     #chillSleepOverlay.show-text #chillSleepText { opacity: 1; }
+
+    /* GARANTUOTAI MATOMOS LIEPSNOS PO PABUDIMO */
   </style>
 </head>
 <body>
@@ -483,9 +485,9 @@
     </div>
   </div>
   <div id="chillSleepOverlay" aria-hidden="true">
-    <div id="chillSleepText">LAIKAS NAMO</div>
+    <div id="chillSleepText">what could go wrong?</div>
   </div>
-  <div id="interactionHint" aria-live="polite"></div>
+<div id="interactionHint" aria-live="polite"></div>
   <div id="debugPanel"></div>
   <div id="debugBadge"></div>
   <div id="debugEditToolbar">
@@ -495,7 +497,7 @@
       <button id="debugUndoObject" type="button">Atstatyti pasirinktą</button>
       <button id="debugDuplicateObject" type="button">Dubliuoti objektą</button>
     </div>
-    <div class="hint">Pelė: pasirinkti ir tempti X/Z · Dubliuoti objektą: sukuria kopiją ir prašo naujo pavadinimo · Rodyklės: stumti · Dešinys pelės: +90° · R/F: aukštyn/žemyn · T/G: didinti/mažinti aukštį · Y/H: platinti/siaurinti · Q/E: sukti · Shift = tiksliau · F3: išeiti</div>
+    <div class="hint">Pelė: pasirinkti ir tempti X/Z · Dubliuoti objektą: sukuria kopiją ir prašo naujo pavadinimo · Delete: pašalinti pasirinktą objektą · Rodyklės: stumti · Dešinys pelės: +90° · R/F: aukštyn/žemyn · T/G: didinti/mažinti aukštį · Y/H: platinti/siaurinti · Q/E: sukti · Shift = tiksliau · F3: išeiti</div>
   </div>
 
 
@@ -517,7 +519,7 @@
   </script>
   <script type="module">
     import * as THREE from 'three';
-    import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+    import { CSS3DRenderer, CSS3DObject, CSS3DSprite } from 'three/addons/renderers/CSS3DRenderer.js';
 
     const unpaidOverlay = document.getElementById('unpaidOverlay');
     let unpaidOverlayOpen = false;
@@ -2536,23 +2538,6 @@
       1
     ]
   },
-  "devu programavimo lenta stiklas": {
-    "position": [
-      -0.08506,
-      0,
-      3.04512
-    ],
-    "rotation": [
-      0,
-      6.2831853,
-      0
-    ],
-    "scale": [
-      1,
-      1,
-      1
-    ]
-  },
   "1 auksto reception kede": {
     "position": [
       26.65,
@@ -2817,6 +2802,142 @@
     "rotation": [
       0,
       1.5707963,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "MOTERU KRIAUKLE 1": {
+    "position": [
+      28.3,
+      0,
+      -10.645
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "MOTERU VEIDRODIS 1 REMAS": {
+    "position": [
+      28.3,
+      1.72,
+      -10.793
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "MOTERU VEIDRODIS 2 REMAS": {
+    "position": [
+      29.4,
+      1.72,
+      -10.793
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "MOTERU KRIAUKLE 2": {
+    "position": [
+      29.4,
+      0,
+      -10.645
+    ],
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "VYRU KRIAUKLE 1": {
+    "position": [
+      28.5,
+      0,
+      -11.415
+    ],
+    "rotation": [
+      0,
+      3.1415927,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "VYRU VEIDRODIS 1 REMAS": {
+    "position": [
+      28.5,
+      1.72,
+      -11.267
+    ],
+    "rotation": [
+      0,
+      3.1415927,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "VYRU KRIAUKLE 2": {
+    "position": [
+      29.6,
+      0,
+      -11.415
+    ],
+    "rotation": [
+      0,
+      3.1415927,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "VYRU VEIDRODIS 2 REMAS": {
+    "position": [
+      29.6,
+      1.72,
+      -11.267
+    ],
+    "rotation": [
+      0,
+      3.1415927,
       0
     ],
     "scale": [
@@ -3817,6 +3938,15 @@
     ]
   }
 ]; // DEBUG_CLONE_DATA
+    // DEBUG_DELETE_DATA: objektai, pašalinti F3 debug režime.
+    const DEBUG_SAVED_DELETED_OBJECTS = [
+  "VYRU VEIDRODIS 2",
+  "VYRU VEIDRODIS 1",
+  "MOTERU VEIDRODIS 2",
+  "MOTERU VEIDRODIS 1",
+  "SP voratinklis",
+  "devu programavimo lenta stiklas"
+]; // DEBUG_DELETE_DATA
     const DEBUG_ORIGINAL_HTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
     function getGameViewportSize() {
@@ -3873,6 +4003,7 @@
     const debugChangedObjects = new Map();
     const debugOriginalTransforms = new Map();
     const debugCreatedClones = new Map();
+    const debugDeletedObjects = new Set(DEBUG_SAVED_DELETED_OBJECTS);
     // Visi objektai, kuriems debug sistema turi taikyti dinaminę koliziją.
     // Čia patenka ir tikros debug kopijos, ir anksčiau programiškai su .clone(true)
     // sukurti bei DEBUG_SAVED_TRANSFORMS saugomi objektai (pvz. dks/aje/dst stalai).
@@ -4035,6 +4166,33 @@
       refreshDebugBox();
       debugCopyFlashUntil = performance.now() + 1800;
       debugBadge.textContent = `SUKURTA KOPIJA: ${newName}`;
+    }
+
+    function deleteSelectedDebugObject() {
+      if (!debugMode || !debugSelectedObject) return;
+
+      const obj = debugSelectedObject;
+      const name = getDebugObjectName(obj);
+      if (!name) return;
+
+      // Pažymime kaip ištrintą, kad „Išsaugoti HTML“ šį pašalinimą išlaikytų.
+      debugDeletedObjects.add(name);
+      debugChangedObjects.delete(name);
+      debugOriginalTransforms.delete(name);
+      debugCollisionObjects.delete(obj);
+
+      // Jei tai debug režime sukurta kopija, nebesaugome jos kopijų sąraše.
+      if (debugCreatedClones.has(name)) debugCreatedClones.delete(name);
+
+      debugDragging = false;
+      debugCurrentHit = null;
+      debugSelectedObject = null;
+      removeDebugBox();
+
+      if (obj.parent) obj.parent.remove(obj);
+
+      debugCopyFlashUntil = performance.now() + 1800;
+      debugBadge.textContent = `PAŠALINTA: ${name}`;
     }
 
     function removeDebugBox() {
@@ -4217,6 +4375,11 @@
         copyDebugPointToClipboard();
         return;
       }
+      if (event.code === 'Delete' && debugSelectedObject) {
+        event.preventDefault();
+        deleteSelectedDebugObject();
+        return;
+      }
       if (!debugSelectedObject) return;
       const fine = event.shiftKey;
 
@@ -4276,6 +4439,7 @@
     debugSaveHtml.addEventListener('click', () => {
       const merged = { ...DEBUG_SAVED_TRANSFORMS };
       for (const [name, tr] of debugChangedObjects.entries()) merged[name] = tr;
+      for (const name of debugDeletedObjects) delete merged[name];
       const json = JSON.stringify(merged, null, 2);
       const replacement = `const DEBUG_SAVED_TRANSFORMS = ${json}; // DEBUG_SAVE_DATA`;
       const cloneData = Array.from(debugCreatedClones.entries()).map(([name, info]) => ({
@@ -4287,6 +4451,7 @@
       }));
       // Įtraukiame ir ankstesniame išsaugotame faile jau buvusias kopijas, jei jos nebuvo perrašytos.
       for (const saved of DEBUG_SAVED_CLONES) {
+        if (debugDeletedObjects.has(saved.name)) continue;
         if (!cloneData.some(c => c.name === saved.name)) cloneData.push(saved);
       }
       const cloneReplacement = `const DEBUG_SAVED_CLONES = ${JSON.stringify(cloneData, null, 2)}; // DEBUG_CLONE_DATA`;
@@ -4297,6 +4462,11 @@
       updated = updated.replace(
         /const DEBUG_SAVED_CLONES = [\s\S]*?; \/\/ DEBUG_CLONE_DATA/,
         cloneReplacement
+      );
+      const deletedReplacement = `const DEBUG_SAVED_DELETED_OBJECTS = ${JSON.stringify(Array.from(debugDeletedObjects), null, 2)}; // DEBUG_DELETE_DATA`;
+      updated = updated.replace(
+        /const DEBUG_SAVED_DELETED_OBJECTS = [\s\S]*?; \/\/ DEBUG_DELETE_DATA/,
+        deletedReplacement
       );
       const blob = new Blob([updated], { type: 'text/html;charset=utf-8' });
       const a = document.createElement('a');
@@ -4342,6 +4512,24 @@
       }
     }
 
+    function applySavedDebugDeletions() {
+      if (!DEBUG_SAVED_DELETED_OBJECTS.length) return;
+      const targets = [];
+      scene.traverse(obj => {
+        const name = (obj.userData && obj.userData.objectName) || obj.name;
+        if (name && debugDeletedObjects.has(name)) targets.push(obj);
+      });
+      // Pirmiausia gilesni objektai, kad saugiai pašalintume ir grupių vaikus.
+      targets.sort((a, b) => {
+        const depth = o => { let d = 0; while (o && o.parent) { d++; o = o.parent; } return d; };
+        return depth(b) - depth(a);
+      });
+      for (const obj of targets) {
+        debugCollisionObjects.delete(obj);
+        if (obj.parent) obj.parent.remove(obj);
+      }
+    }
+
     function updateDebugView() {
       if (!debugMode) return;
       let hit = null;
@@ -4354,7 +4542,7 @@
       }
 
       const cp = camera.position;
-      const header = 'DEBUG EDIT: ON  [F3 išjungti]  [C kopijuoti tašką]  [Dubliuoti objektą]';
+      const header = 'DEBUG EDIT: ON  [F3 išjungti]  [C kopijuoti tašką]  [Delete pašalinti]  [Dubliuoti objektą]';
       const cameraLine = `Kamera: x=${cp.x.toFixed(2)}  y=${cp.y.toFixed(2)}  z=${cp.z.toFixed(2)}`;
       const target = debugSelectedObject || (hit ? getDebugEditableObject(hit.object) : null);
       if (!target) {
@@ -4375,7 +4563,7 @@
         `Pozicija: x=${wp.x.toFixed(2)}  y=${wp.y.toFixed(2)}  z=${wp.z.toFixed(2)}\n` +
         `Pasukimas Y: ${THREE.MathUtils.radToDeg(target.rotation.y).toFixed(1)}°\n` +
         `Pakeista objektų: ${debugChangedObjects.size}\n\n` +
-        `Pelė = tempti X/Z | Dubliuoti = kopija + naujas vardas | Rodyklės = stumti | Dešinys pelės = +90° | R/F = Y | Q/E = sukti`;
+        `Pelė = tempti X/Z | Delete = pašalinti | Dubliuoti = kopija + naujas vardas | Rodyklės = stumti | Dešinys pelės = +90° | R/F = Y | Q/E = sukti`;
     }
 
     // Šviesa
@@ -4414,7 +4602,7 @@
       fctx.fillStyle = `rgb(${shade}, ${shade + 2}, ${shade + 4})`;
       fctx.fillRect(0, 0, tileSize, tileSize);
 
-      for (let i = 0; i < 150; i++) {
+      for (let i = 0; i < 360; i++) {
         const px = Math.random() * tileSize;
         const width = 0.5 + Math.random() * 2.2;
         const light = 60 + Math.floor(Math.random() * 55);
@@ -4789,6 +4977,33 @@
     // prie galinio lango z=-17.5. Parkingas dedamas žemiau, ant LAUKO lygio.
     // Parkinge pastatytos mašinos. Sąmoningai paliktos kelios tuščios vietos,
     // kad aikštelė neatrodytų visiškai užpildyta.
+    // Automobilių priekinės lemputės: dieną išjungtos, sutemus įsijungia.
+    function addVehicleHeadlights(vehicle, opts = {}) {
+      const frontZ = opts.frontZ ?? 1.0;
+      const y = opts.y ?? 0.42;
+      const halfX = opts.halfX ?? 0.25;
+      const lampW = opts.lampW ?? 0.16;
+      const lampH = opts.lampH ?? 0.10;
+      const lampMat = new THREE.MeshBasicMaterial({ color: 0xfff3bf, toneMapped: false });
+      [-halfX, halfX].forEach(x => {
+        const lamp = new THREE.Mesh(new THREE.BoxGeometry(lampW, lampH, 0.04), lampMat.clone());
+        lamp.position.set(x, y, frontZ + 0.025);
+        lamp.userData.headlight = true;
+        lamp.visible = false;
+        vehicle.add(lamp);
+      });
+
+
+    }
+
+    function setVehicleHeadlights(on) {
+      scene.traverse(obj => {
+        if (obj.userData && obj.userData.headlight) {
+          obj.visible = !!on;
+        }
+      });
+    }
+
     function sukurtiParkingoMasina(targetParking, name, color, x, z, rotY = 0, tipas = 'sedan') {
       const car = new THREE.Group();
       car.name = name;
@@ -4831,6 +5046,8 @@
           rim.position.set(wx, 0.20, wz); car.add(rim);
         }
       }
+
+      addVehicleHeadlights(car, { frontZ: f.l * 0.50, y: 0.38, halfX: f.w * 0.28, lampW: 0.13, lampH: 0.08, beamLength: 1.9, beamWidth: 0.45 });
 
       car.position.set(x, 0.025, z);
       car.rotation.y = rotY;
@@ -5389,11 +5606,7 @@
       masina1.add(wheel);
     });
 
-    [-0.48, 0.48].forEach(x => {
-      const lamp = new THREE.Mesh(new THREE.BoxGeometry(0.27, 0.16, 0.05), carLightMat);
-      lamp.position.set(x, 0.51, 1.595);
-      masina1.add(lamp);
-    });
+    addVehicleHeadlights(masina1, { frontZ: 1.575, y: 0.51, halfX: 0.48, lampW: 0.27, lampH: 0.16, beamLength: 4.0, beamWidth: 0.92 });
 
     // Kairioji juosta žiūrint kelio vietinėje koordinačių sistemoje.
     const masina1LaneX = -1.72;
@@ -5621,11 +5834,7 @@
     });
 
     // Priekiniai žibintai.
-    [-0.58, 0.58].forEach(x => {
-      const lamp = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.18, 0.05), busLightMat);
-      lamp.position.set(x, 0.65, 2.855);
-      autobusas1.add(lamp);
-    });
+    addVehicleHeadlights(autobusas1, { frontZ: 2.83, y: 0.65, halfX: 0.58, lampW: 0.32, lampH: 0.18, beamLength: 5.0, beamWidth: 1.15 });
 
     const autobusas1LaneX = masina1LaneX;
     // Toks pats greitis kaip „masina 1“ ir „masina 3“, kad toje pačioje
@@ -6460,10 +6669,10 @@
     // Antraštė.
     dbctx.fillStyle = 'rgba(230,255,255,0.95)';
     dbctx.font = 'bold 42px Consolas, monospace';
-    dbctx.fillText('DEV FLOW // absolutely production-ready*', 42, 58);
+    dbctx.fillText('DEV FLOW // nu šitas tai tikrai į prodą*', 42, 58);
     dbctx.font = '22px Consolas, monospace';
     dbctx.fillStyle = 'rgba(170,235,255,0.86)';
-    dbctx.fillText('* according to localhost', 44, 91);
+    dbctx.fillText('* AISDEV veikia, ko dar norit', 44, 91);
 
     // Helperiai schemoms.
     function devBoardBox(x, y, w, h, title) {
@@ -6488,8 +6697,8 @@
     }
 
     // Kairėje – klasikinė "kaip viskas turėtų veikti" schema.
-    devBoardBox(48, 145, 230, 100, 'USER');
-    devBoardBox(365, 145, 260, 100, 'FRONTEND');
+    devBoardBox(48, 145, 230, 100, 'USERIS');
+    devBoardBox(365, 145, 260, 100, 'FRONTAS');
     devBoardBox(715, 145, 250, 100, 'API');
     devBoardBox(1060, 145, 280, 100, 'DOMINO');
     devBoardArrow(278, 195, 365, 195);
@@ -6499,12 +6708,12 @@
     // Antra schema – realybė po kelių metų legacy.
     dbctx.fillStyle = 'rgba(255,185,110,0.96)';
     dbctx.font = 'bold 29px Consolas, monospace';
-    dbctx.fillText('REALITY:', 48, 320);
-    devBoardBox(48, 350, 210, 90, 'FORMULA');
-    devBoardBox(334, 350, 210, 90, 'LS AGENT');
+    dbctx.fillText('REALYBĖ:', 48, 320);
+    devBoardBox(48, 350, 210, 90, 'FORMULĖ');
+    devBoardBox(334, 350, 210, 90, 'LS AGENTAS');
     devBoardBox(620, 350, 210, 90, 'XPAGES');
     devBoardBox(906, 350, 210, 90, 'JAVA');
-    devBoardBox(1192, 350, 150, 90, '???');
+    devBoardBox(1192, 350, 150, 90, 'NU BBŽ');
     devBoardArrow(258, 395, 334, 395);
     devBoardArrow(544, 395, 620, 395);
     devBoardArrow(830, 395, 906, 395);
@@ -6513,20 +6722,20 @@
     // Pseudokodas + Domino prikolas.
     dbctx.font = '24px Consolas, monospace';
     dbctx.fillStyle = 'rgba(185,255,190,0.96)';
-    dbctx.fillText('if (worksInClient) {', 52, 515);
-    dbctx.fillText('    deployToDomino();', 52, 550);
-    dbctx.fillText('    // confidence--;', 52, 585);
+    dbctx.fillText('if (veikiaAISDEV) {', 52, 515);
+    dbctx.fillText('    keliamIProda();', 52, 550);
+    dbctx.fillText('    // pasitikejimas--;', 52, 585);
     dbctx.fillText('}', 52, 620);
 
     dbctx.fillStyle = 'rgba(255,145,165,0.98)';
     dbctx.font = 'bold 30px Consolas, monospace';
-    dbctx.fillText('HCL DOMINO:', 650, 515);
+    dbctx.fillText('HCL DOMINO / AISDEV:', 650, 515);
     dbctx.font = 'bold 26px Consolas, monospace';
-    dbctx.fillText('"It worked in Notes Client."', 650, 555);
-    dbctx.fillText('Domino: "cute."', 650, 594);
+    dbctx.fillText('"AISDEV’e veikė, seni."', 650, 555);
+    dbctx.fillText('Domino: "nu jo, sėkmės."', 650, 594);
     dbctx.font = '22px Consolas, monospace';
     dbctx.fillStyle = 'rgba(220,245,255,0.90)';
-    dbctx.fillText('@If(problem=""; "feature"; "legacy feature")', 650, 642);
+    dbctx.fillText('@If(problema=""; "feature"; "legacy bajeris")', 650, 642);
 
     const devBoardTexture = new THREE.CanvasTexture(devBoardCanvas);
     devBoardTexture.colorSpace = THREE.SRGBColorSpace;
@@ -6837,6 +7046,114 @@
     scene.add(spLight.target);
 
     // ============================================================
+    // SP KABINETAS: STAMBUS, AIŠKIAI MATOMAS VORATINKLIŲ SLUOKSNIS
+    // Canvas tekstūra + permatomos 3D plokštumos. Tai sąmoningai nenaudoja
+    // WebGL 1px LineBasicMaterial linijų, kurios kai kuriuose kompiuteriuose
+    // praktiškai dingsta. Keli sluoksniai per visą kambarį uždengia AGA/AST
+    // baldus taip, kad jie tik vos persišviečia.
+    // ============================================================
+    function makeSpWebTexture(seedOffset = 0) {
+      const c = document.createElement('canvas');
+      c.width = 1024; c.height = 512;
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.strokeStyle = 'rgba(238,238,228,0.94)';
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      let seed = 912731 + seedOffset * 1709;
+      const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+
+      const hubs = 7;
+      for (let h = 0; h < hubs; h++) {
+        const cx = (0.08 + rnd() * 0.84) * c.width;
+        const cy = (0.08 + rnd() * 0.84) * c.height;
+        const radius = (0.20 + rnd() * 0.24) * Math.min(c.width, c.height);
+        const spokes = 13 + Math.floor(rnd() * 8);
+        const angles = [];
+        for (let i = 0; i < spokes; i++) angles.push((i / spokes) * Math.PI * 2 + (rnd()-0.5)*0.18);
+
+        ctx.lineWidth = 2.7 + rnd() * 2.0;
+        for (const a of angles) {
+          const rr = radius * (0.85 + rnd()*0.40);
+          ctx.beginPath(); ctx.moveTo(cx, cy);
+          ctx.lineTo(cx + Math.cos(a)*rr, cy + Math.sin(a)*rr); ctx.stroke();
+        }
+
+        const ringCount = 8;
+        for (let r = 1; r <= ringCount; r++) {
+          const frac = r / ringCount;
+          ctx.lineWidth = 2.0 + (1-frac)*1.6;
+          ctx.beginPath();
+          for (let i = 0; i <= spokes; i++) {
+            const idx = i % spokes;
+            const a = angles[idx];
+            const wobble = 0.90 + rnd()*0.20;
+            const rr = radius * frac * wobble;
+            const x = cx + Math.cos(a)*rr;
+            const y = cy + Math.sin(a)*rr;
+            if (i === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+          }
+          ctx.stroke();
+        }
+      }
+
+      // Atsitiktinės nutįsusios gijos tarp tinklų, kad vaizdas būtų netvarkingas.
+      ctx.strokeStyle = 'rgba(245,245,235,0.78)';
+      for (let i = 0; i < 45; i++) {
+        ctx.lineWidth = 1.6 + rnd()*2.2;
+        const x1=rnd()*c.width, y1=rnd()*c.height, x2=rnd()*c.width, y2=rnd()*c.height;
+        ctx.beginPath(); ctx.moveTo(x1,y1);
+        ctx.quadraticCurveTo((x1+x2)/2 + (rnd()-.5)*160, (y1+y2)/2 + (rnd()-.5)*110, x2,y2);
+        ctx.stroke();
+      }
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.minFilter = THREE.LinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    const spWebSheets = new THREE.Group();
+    spWebSheets.name = 'SP DIDELI VORATINKLIAI';
+    spWebSheets.userData.objectName = 'SP DIDELI VORATINKLIAI';
+    scene.add(spWebSheets);
+
+    const spWebRoomW = spRoom.right - spRoom.left - 0.35;
+    const spWebRoomD = spRoom.back - spRoom.front - 0.35;
+    const spWebMidX = (spRoom.left + spRoom.right) / 2;
+
+    // Vertikalūs sluoksniai nuo pat įėjimo iki giliausios baldų zonos.
+    const spWebZLayers = [0.10,0.20,0.31,0.43,0.55,0.67,0.79,0.90];
+    spWebZLayers.forEach((t, i) => {
+      const mat = new THREE.MeshBasicMaterial({
+        map: makeSpWebTexture(i), transparent: true, opacity: 0.82,
+        side: THREE.DoubleSide, depthWrite: false, alphaTest: 0.04, toneMapped: false
+      });
+      const sheet = new THREE.Mesh(new THREE.PlaneGeometry(spWebRoomW, wallHeight - 0.18), mat);
+      sheet.position.set(spWebMidX, wallHeight/2, THREE.MathUtils.lerp(spRoom.front + 0.18, spRoom.back - 0.18, t));
+      sheet.rotation.z = (i % 2 ? 0.035 : -0.035);
+      sheet.renderOrder = 6 + i;
+      spWebSheets.add(sheet);
+    });
+
+    // Lubų voratinkliai – matosi pakėlus akis ir tankina visą kabinetą.
+    for (let i = 0; i < 3; i++) {
+      const mat = new THREE.MeshBasicMaterial({
+        map: makeSpWebTexture(30+i), transparent: true, opacity: 0.72,
+        side: THREE.DoubleSide, depthWrite: false, alphaTest: 0.04, toneMapped: false
+      });
+      const ceilingWeb = new THREE.Mesh(new THREE.PlaneGeometry(spWebRoomW, spWebRoomD), mat);
+      ceilingWeb.rotation.x = Math.PI/2;
+      ceilingWeb.position.set(spWebMidX, wallHeight - 0.10 - i*0.035, (spRoom.front+spRoom.back)/2);
+      ceilingWeb.rotation.z = (i-1)*0.12;
+      ceilingWeb.renderOrder = 15+i;
+      spWebSheets.add(ceilingWeb);
+    }
+
+    // ============================================================
     // SP KABINETAS: CHAOTIŠKAI VORATINKLIAIS UŽAUGĘS VISAS KABINETAS
     // Paliekamas tik siauras, šiek tiek vingiuojantis praėjimas nuo SP įėjimo
     // iki AGA stalo. Visa kita erdvė – sienos, lubos, kampai ir kabineto
@@ -6845,7 +7162,7 @@
     const spCobwebMaterial = new THREE.LineBasicMaterial({
       color: 0xd9d9d2,
       transparent: true,
-      opacity: 0.50,
+      opacity: 0.88,
       depthWrite: false
     });
 
@@ -6895,7 +7212,7 @@
 
       const geo = new THREE.BufferGeometry().setFromPoints(pts);
       const mat = spCobwebMaterial.clone();
-      mat.opacity = Math.max(0.22, Math.min(0.68, spCobwebMaterial.opacity * opacityScale));
+      mat.opacity = Math.max(0.38, Math.min(0.92, spCobwebMaterial.opacity * opacityScale));
       mat.clippingPlanes = spCobwebClipPlanes;
       mat.clipIntersection = false;
       mat.needsUpdate = true;
@@ -6907,6 +7224,29 @@
       scene.add(web);
       return web;
     }
+
+    // LABAI AIŠKIAI MATOMI VORATINKLIAI PRIE PAT SP ĮĖJIMO.
+    // Kamera iš koridoriaus (~x=11.7, z=1.2) turi juos matyti iš karto.
+    // Tai tik vizualūs LineSegments, todėl per juos galima praeiti.
+    [
+      [ 9.2, 1.65, 2.32, 1.75, 'xy',  0.18, 0.05, 0.00, 1.25],
+      [11.2, 1.55, 2.35, 1.95, 'xy', -0.22, 0.00, 0.00, 1.30],
+      [13.4, 1.70, 2.38, 1.80, 'xy',  0.31, 0.00, 0.00, 1.28],
+      [15.6, 1.58, 2.42, 1.70, 'xy', -0.27, 0.00, 0.00, 1.22],
+      [17.7, 1.68, 2.46, 1.85, 'xy',  0.16, 0.00, 0.00, 1.26],
+      [19.5, 1.62, 2.50, 1.55, 'xy', -0.38, 0.00, 0.00, 1.20],
+      [10.1, 2.62, 2.66, 1.42, 'xy', -0.35, 0.04, 0.00, 1.18],
+      [12.7, 2.58, 2.72, 1.48, 'xy',  0.41, 0.00, 0.00, 1.18],
+      [15.2, 2.60, 2.78, 1.38, 'xy', -0.19, 0.00, 0.00, 1.15],
+      [17.9, 2.56, 2.84, 1.46, 'xy',  0.29, 0.00, 0.00, 1.18],
+      [11.5, 1.20, 3.05, 1.65, 'xy',  0.52, 0.08, 0.00, 1.20],
+      [14.6, 1.45, 3.18, 1.75, 'xy', -0.48, 0.00, 0.00, 1.20],
+      [17.1, 1.30, 3.30, 1.70, 'xy',  0.33, 0.00, 0.00, 1.18],
+      [10.4, 1.65, 3.72, 1.72, 'xy', -0.18, 0.00, 0.00, 1.15],
+      [13.3, 1.52, 3.86, 1.82, 'xy',  0.24, 0.00, 0.00, 1.18],
+      [16.2, 1.64, 4.00, 1.78, 'xy', -0.36, 0.00, 0.00, 1.16],
+      [18.7, 1.48, 4.15, 1.60, 'xy',  0.43, 0.00, 0.00, 1.14]
+    ].forEach(args => addSpCobweb(...args));
 
     // Deterministinis pseudo-random, kad išdėstymas kaskart būtų toks pats,
     // bet neatrodytų kaip taisyklingos eilės.
@@ -6926,20 +7266,9 @@
       return THREE.MathUtils.lerp(spDoorCenterX, 10.35, t) + Math.sin(t * Math.PI * 1.05) * 0.14;
     }
     function isInsideSpWalkway(x, z, extra = 0) {
-      const half = 1.42 + extra;
-
-      // Pagrindinis visiškai tuščias takas nuo SP įėjimo iki darbo vietų.
-      const onMainPath = Math.abs(x - spPathCenterX(z)) < half;
-
-      // Bendra plati AGA + AST darbo zonos kišenė. Ji iškerpama ir iš voratinklių,
-      // ir iš jų kolizijos, todėl galima laisvai pasiekti AGA stalą, AST stalą,
-      // apeiti kėdes ir pereiti tarp abiejų darbo vietų.
-      const agaAstAccessPocket = (
-        z > 10.85 - extra && z < 14.15 + extra &&
-        x > 7.15 - extra && x < 13.65 + extra
-      );
-
-      return onMainPath || agaAstAccessPocket;
+      const half = 0.62 + extra;
+      // Paliekamas tik siauras praėjimas nuo įėjimo; AGA/AST zona nebėra išvaloma.
+      return Math.abs(x - spPathCenterX(z)) < half;
     }
 
     // 1) Sienos ir kampai – skirtingi dydžiai, aukščiai ir pasvirimai.
@@ -7015,7 +7344,8 @@
     // įėjimo ir einant taku nebesimato didelių plikų / tuščių kabineto plotų.
     // AGA + AST pusė sąmoningai paliekama švari.
     function isAgaAstSide(x, z, extra = 0) {
-      return z > 10.55 - extra && x > 7.0 - extra && x < 14.15 + extra;
+      // AGA ir AST baldai turi būti vos matomi, todėl jų zonos nebeiškerpame.
+      return false;
     }
 
     // Tūrinis užpildymas: įvairūs aukščiai, dydžiai, plokštumos ir rotacijos.
@@ -7040,7 +7370,7 @@
 
     // Dideli persidengiantys voratinkliai „fonui“ – ypač dešinėje ir priekyje,
     // kad per mažesnių voratinklių tarpus nesimatytų tuščio kambario gylio.
-    for (let i = 0; i < 48; i++) {
+    for (let i = 0; i < 95; i++) {
       const x = spRnd(13.9, spRoom.right - 0.20);
       const z = spRnd(spRoom.front + 0.25, spRoom.back - 0.30);
       if (isInsideSpWalkway(x, z, 0.25) || isAgaAstSide(x, z, 0.10)) continue;
@@ -7057,7 +7387,7 @@
 
     // Žemesnis sluoksnis palei grindis ir vidutinį aukštį – uždengia tuščias
     // „skyles“ tarp ankstesnių voratinklių, bet nelenda į praėjimą ar stalų pusę.
-    for (let i = 0; i < 58; i++) {
+    for (let i = 0; i < 110; i++) {
       const x = spRnd(spRoom.left + 0.30, spRoom.right - 0.30);
       const z = spRnd(spRoom.front + 0.35, 10.55);
       if (isInsideSpWalkway(x, z, 0.18)) continue;
@@ -7074,7 +7404,7 @@
 
     // Papildomi lubų sluoksniai virš nevaikštomų zonų. Jie padeda sukurti jausmą,
     // kad visas kabinetas seniai apleistas ir aptrauktas voratinkliais.
-    for (let i = 0; i < 54; i++) {
+    for (let i = 0; i < 95; i++) {
       const x = spRnd(spRoom.left + 0.25, spRoom.right - 0.25);
       const z = spRnd(spRoom.front + 0.25, spRoom.back - 0.30);
       if (isInsideSpWalkway(x, z, 0.22) || isAgaAstSide(x, z, 0.12)) continue;
@@ -8437,6 +8767,54 @@
     const chillSleepOverlay = document.getElementById('chillSleepOverlay');
     let chillSleepActive = false;
 
+    // Po miego Chill zonoje paliekamas tik patamsėjęs vaizdas už langų.
+    let officeOnFire = false;
+
+    // Naktinis dangus. Sukurtas paprastais THREE objektais, kad nesulaužytų starto.
+    const nightSkyGroup = new THREE.Group();
+    nightSkyGroup.name = 'NAKTINIS DANGUS';
+    nightSkyGroup.visible = false;
+    scene.add(nightSkyGroup);
+
+    const nightStarPositions = [];
+    for (let i = 0; i < 420; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const r = 65 + Math.random() * 55;
+      const y = 14 + Math.random() * 55;
+      nightStarPositions.push(Math.cos(a) * r, y, Math.sin(a) * r);
+    }
+    const nightStarGeometry = new THREE.BufferGeometry();
+    nightStarGeometry.setAttribute('position', new THREE.Float32BufferAttribute(nightStarPositions, 3));
+    const nightStarPoints = new THREE.Points(
+      nightStarGeometry,
+      new THREE.PointsMaterial({ color: 0xffffff, size: 0.26, transparent: true, opacity: 0.92, depthWrite: false })
+    );
+    nightSkyGroup.add(nightStarPoints);
+
+    const nightMoon = new THREE.Mesh(
+      new THREE.SphereGeometry(3.0, 24, 16),
+      new THREE.MeshBasicMaterial({ color: 0xfff4c8, fog: false })
+    );
+    nightMoon.position.set(36, 32, -72);
+    nightSkyGroup.add(nightMoon);
+
+    function showNightSky(){
+      nightSkyGroup.visible = true;
+    }
+
+    function igniteOffice(){
+      officeOnFire = true;
+      // Jokios ugnies, dūmų ar oranžinio apšvietimo – tik tamsesnis laukas už langų.
+      scene.background = new THREE.Color(0x17110f);
+      scene.fog = new THREE.Fog(0x17110f, 35, 120);
+      setVehicleHeadlights(true);
+      showNightSky();
+    }
+
+    function updateOfficeFire(now){
+      // Sąmoningai tuščia: liepsnų efektas pašalintas.
+    }
+
     function sleepOnChillSofa() {
       if (chillSleepActive) return;
       chillSleepActive = true;
@@ -8453,6 +8831,7 @@
         // Pabundame tame pačiame taške, bet žvilgsnis nukreiptas tiesiai į lubas.
         camera.rotation.order = 'YXZ';
         camera.rotation.set(-Math.PI / 2 + 0.01, 0, 0);
+        igniteOffice();
       }, 2850);
 
       // Tekstas išnyksta, tada vaizdas švelniai grįžta.
@@ -12949,6 +13328,8 @@
       // Originalaus klozeto priekis yra +Z; pasukus -90° jis ziuri i -X,
       // t. y. i tuliko ieinamuju duru / Liftu kambario puse.
       toilet.rotation.y = -Math.PI / 2;
+      // Klozetai aiškiai sumažinti iki 70 % originalaus dydžio.
+      toilet.scale.multiplyScalar(0.70);
       toilet.position.set(backX - 0.48, 0, zCenter);
       scene.add(toilet);
       return toilet;
@@ -14255,7 +14636,7 @@
     jctx.font = 'bold 19px Arial';
     jctx.fillText('AIS', 12, 25);
     jctx.font = '22px Arial';
-    jctx.fillText('Sekasoft', 44, 26);
+    jctx.fillText('────────', 44, 26);
 
     // Kairioji tamsi šoninė juosta.
     jctx.fillStyle = '#2e4058';
@@ -16731,7 +17112,7 @@
         camera.position.x = oldX;
         camera.position.z = oldZ;
       }
-      const inChillDoorOpening = Math.abs(x) < doorHalfWidth - playerRadius * 0.35;
+      const inChillDoorOpening = Math.abs(x) < doorHalfWidth + 0.45; // platesnė praeinama anga, kad neužkabintų durų kolizija
       if (!inChillDoorOpening && x > chillRoom.left - chillPad && x < chillRoom.right + chillPad && Math.abs(z - chillRoom.front) < chillPad) {
         camera.position.z = oldZ;
       }
@@ -19184,6 +19565,8 @@
     function animate() {
       requestAnimationFrame(animate);
 
+      updateOfficeFire(performance.now());
+
       // Stebėjimo kameros raudonas LED mirksi kaip įrašymo indikatorius.
       securityCamLed.visible = Math.floor(performance.now() / 550) % 2 === 0;
 
@@ -19416,6 +19799,7 @@
     }
 
 
+    applySavedDebugDeletions();
     animate();
 
     window.addEventListener('resize', () => {
@@ -19428,6 +19812,7 @@
 
 
   </script>
+
 
 
 
